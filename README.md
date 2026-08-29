@@ -1,6 +1,6 @@
 # GA_Horizon
 
-GA_Horizon is a lightweight Grand Archive season companion focused on Malaysia's current PRD season. It helps players and organizers track weekly events, store championships, regional tournaments, and venue details in a clean, mobile-friendly dashboard.
+GA_Horizon is a lightweight Grand Archive season companion focused on Malaysia. It helps try-hard players and organisers track weekly events, store championships, regional tournaments, and venue details in a clean, mobile-friendly dashboard.
 
 ## Purpose
 
@@ -33,26 +33,6 @@ The main page displays:
 - `favicon.jpg` — site icon used for the browser tab
 - `stores/` — store-specific detail pages (for example, Weatherlight Enterprise)
 
-## Running locally
-
-Because this is a static site, you can use either of the following:
-
-1. Open `index.html` directly in a browser.
-2. From this directory, serve it locally:
-
-```bash
-python -m http.server 8000
-```
-
-Then open:
-
-```text
-http://localhost:8000
-```
-
-## Deployment
-
-The site is compatible with static hosting such as Vercel. For deployment, the project folder can be published as the site root with no build step required.
 
 ## Notes for future expansion
 
