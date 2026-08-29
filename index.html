@@ -342,7 +342,7 @@ function render(){
           ${e.address ? `<div class="address">${e.address}</div>` : '<div class="address">Address not yet confirmed</div>'}
           ${e.state ? `<span class="state-tag">${e.state}</span>` : ''}
           ${e.address ? `<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener noreferrer">Navigate</a>` : ''}
-          ${e.store === 'The Weatherlight Enterprise' ? '<a class="event-link" href="The%20Weatherlight%20Enterprise/index.html">View event info</a>' : ''}
+          ${e.store === 'The Weatherlight Enterprise' ? '<a class="event-link" href="stores/The%20Weatherlight%20Enterprise/index.html">View event info</a>' : ''}
           <div class="meta-row">
             <span class="date ${e.date ? '' : 'tbd'}">${e.date ? dayLabel(e.date) : 'Date TBD'}</span>
             <span>Store Championship</span>
