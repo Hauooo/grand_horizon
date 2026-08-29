@@ -315,7 +315,7 @@ footer{
       store: row.store_name || row.title || 'Unknown store',
       date: row.date ? FMT.format(new Date(row.date + 'T00:00:00')).replace(/ /g, ' ') : 'TBD',
       rawDate: row.date || null,
-      address: row.google_maps_url ? 'Google Maps link available' : 'Location to be confirmed',
+      address: row.google_maps_url ? ' ' : 'Location to be confirmed',
       state: row.state || 'TBC',
       verified: !!row.is_verified,
       type: /regional/i.test(row.title || '') ? 'regional' : 'store',
@@ -407,7 +407,7 @@ footer{
             <div class="state-tag">${event.state || 'TBC'}</div>
             <div class="meta-row">
               <span class="date ${event.isTBD ? 'tbd' : ''}">${formatDateForCard(event)}</span>
-              <span>${event.type === 'regional' ? 'Regional' : 'Championship'}</span>
+              <span>${event.type === 'regional' ? 'Regional' : 'Store Championship'}</span>
             </div>
             <a class="map-link" href="${event.mapsUrl}" target="_blank" rel="noopener noreferrer">Open in Maps</a>
           </article>

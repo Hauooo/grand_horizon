@@ -24,7 +24,7 @@ create table if not exists stores (
 
 create table if not exists venues (
   id uuid primary key default gen_random_uuid(),
-  store_id uuid not null references stores(id) on delete cascade,
+  store_id uuid references stores(id) on delete cascade,
   name text not null,
   address text,
   city text,
@@ -80,6 +80,8 @@ on conflict (slug) do update set
   logo_url = excluded.logo_url;
 
 insert into stores (name, slug, region, country, website_url) values
+  ('Malaysia Regional 1', 'malaysia-regional-1', 'TBC', 'Malaysia', null),
+  ('Malaysia Regional 2', 'malaysia-regional-2', 'TBC', 'Malaysia', null),
   ('Saikou Cards, Figurines, and Collectibles', 'saikou-cards-figurines-and-collectibles', 'Selangor', 'Malaysia', null),
   ('The Collectors Hut', 'the-collectors-hut', 'Sarawak', 'Malaysia', null),
   ('The Weatherlight Enterprise', 'the-weatherlight-enterprise', 'Selangor', 'Malaysia', null),
@@ -127,126 +129,65 @@ on conflict (slug) do update set
   country = excluded.country,
   website_url = excluded.website_url;
 
-insert into venues (store_id, name, address, city, state, country, google_maps_url, address_status, is_verified, is_active)
-select s.id, s.name, v.address, v.city, v.state, 'Malaysia', v.google_maps_url, 'confirmed', true, true
-from (
-  values
-    ('Saikou Cards, Figurines, and Collectibles', '34-1A, Jalan Puteri 1/2, Bandar Puteri', 'Puchong', 'Selangor', 'https://maps.app.goo.gl/LV4vA9RZwsXTBBgi7'),
-    ('The Collectors Hut', '1401, Level, Above Route 66, 1, Jalan Shell', 'Miri', 'Sarawak', 'https://maps.app.goo.gl/5JBdxsC1HZrRcJQ17'),
-    ('The Weatherlight Enterprise', '1, Jalan USJ 10/1a, Usj 1', 'Subang Jaya', 'Selangor', 'https://maps.app.goo.gl/uz7zHJ25WSDusdBA9'),
-    ('Aexern', '52A, Block M, Jalan Raja Uda, Pusat Perniagaan Raja Uda', 'Butterworth', 'Pulau Pinang', 'https://maps.app.goo.gl/QtHbWuniwdf3ojoeA'),
-    ('Neko Neko Nyaa', 'Block 10, 1st Floor, Q3A, KCLD, Lot 2762', 'Kuching', 'Sarawak', 'https://maps.app.goo.gl/gU67j7zAEYpsL7XFA'),
-    ('RoundTable Hobbies', 'B-264 , Tingkat, 1, Jalan Beserah, Taman Beserah', 'Kuantan', 'Pahang', 'https://maps.app.goo.gl/7ufLWujrUQpQDRYu6'),
-    ('HOBBY MAKER', '4-22, Pragin Mall, Jalan Dr Lim Chwee Leong,Pulau Pinang!', 'George Town', 'Pulau Pinang', 'https://maps.app.goo.gl/mvi2uRjmMWVEG5eQ9'),
-    ('Gaia Card Game Sanctuary', 'Endah Parade, Jalan 1/149e, Taman Sri Endah', 'Kuala Lumpur', 'Wilayah Persekutuan Kuala Lumpur', 'https://maps.app.goo.gl/XAsLrRXUp2syetqA8'),
-    ('Favonia Hobbies', '12b, Persiaran Greentown 6, Greentown Business Centre', 'Ipoh', 'Perak', 'https://maps.app.goo.gl/pE9DTij4JHrN3PXy5'),
-    ('Gathering Hub', 'Taman Masjaya', 'Kota Kinabalu', 'Sabah', 'https://maps.app.goo.gl/WuHGx1SyaHw63oYV8'),
-    ('The Card Shop PLT', '54A, Jln 19/3, Seksyen 19', 'Petaling Jaya', 'Selangor', 'https://maps.app.goo.gl/xBTaJBugJwTKNgDg6'),
-    ('Game and Glory Sdn Bhd', '1-42A, Jalan PJU 1/45, Aman Suria', 'Petaling Jaya', 'Selangor', 'https://maps.app.goo.gl/NCmMtD3DnxhT6VFH8'),
-    ('YOLO TCG PARK', 'Parcel no.2 - level, 3 Of Bintulu, Parkcity Commerce Square', 'Bintulu', 'Sarawak', 'https://maps.app.goo.gl/8PsfUYHETu7fR5qC6'),
-    ('Hobby Lords Malaysia', 'Seksyen U13, 31-1F, Persiaran Setia Utama, Setia Alam', 'Shah Alam', 'Selangor', 'https://maps.app.goo.gl/41TR3xyJEFfyxW9A6'),
-    ('Games Haven BBK', '17, Lorong Tiara 1a, Bandar Baru Klang', 'Klang', 'Selangor', 'https://maps.app.goo.gl/HGkaty2GFwXCjRNe7'),
-    ('Tabletop Arena', 'S-206, 2ND FLOOR, 1BORNEO HYPERMALL JALAN SULAMAN', 'Kota Kinabalu', 'Sabah', 'https://maps.app.goo.gl/bCguivVXrAWV9McJ7'),
-    ('Spectre', 'NO.9-1, JALAN PJS 8/13, DATARAN MENTARI', 'Subang Jaya', 'Selangor', 'https://maps.app.goo.gl/9fKp1bpWTc6KZQR56'),
-    ('Kado', 'A0331, Blok A, Eko Galleria Iskandar Puteri', 'Johor', 'Johor Darul Ta''zim', 'https://maps.app.goo.gl/5eKWPaTRdQMwktFX7'),
-    ('MVP Hobbies & Collectibles Sdn Bhd', 'A-G-17, Zenopy Shoplex, Jln LP 7/4, Lestari Perdana', 'Seri Kembangan', 'Selangor', 'https://maps.app.goo.gl/S1iFnnbUK49kGa7p9'),
-    ('SGC Card Cafe', '23-02, Jalan Suria 7, Bandar Baru Seri Alam', 'Masai', 'Johor', 'https://maps.app.goo.gl/1jhR4ybMUkqMsg4m7'),
-    ('Astral Rift Tactics Shop', '8A, Medan Bercham Selatan 1, Medan Bercham Selatan', 'Ipoh', 'Perak', 'https://maps.app.goo.gl/UnRjdLaH6fkz5fZv6'),
-    ('Monxter', '18-2, Jalan Menara Gading 1, Lebuhraya Hubungan Timur Barat', 'Kuala Lumpur', 'Wilayah Persekutuan Kuala Lumpur', 'https://maps.app.goo.gl/7SrETCZmbTK4YSZS9'),
-    ('Kamenn Enterprise', '55a, Jalan Perwira 2, Taman Ungku Tun Aminah', 'Skudai', 'Johor Darul Ta''zim', 'https://maps.app.goo.gl/6d5b1d5APnPiP3Kt6'),
-    ('Living Legends Enterprise', '32A, Jalan Pingai, Taman Pelangi', 'Johor Bahru', 'Johor Darul Ta''zim', 'https://maps.app.goo.gl/gumrMDMvTbxAU6se8'),
-    ('Vincent''s Card Colosseum', 'Lot 2036 (1st Floor), Marina Commercial, Phase 1', 'Miri', 'Sarawak', 'https://maps.app.goo.gl/KhGLt53DAz1Vq7mY7'),
-    ('Yugoco TCG & Games', 'no 5, 1, Jalan PNBBU 2, Pusat Niaga Bukit Baru Utama', 'Bukit Baru', 'Melaka', 'https://maps.app.goo.gl/NUD4PAGCMR2rntWh7'),
-    ('CARDFIGHT BUDDY ENTERPRISE', '141B, Pusat Perniagaan Raja Uda, Jalan Raja Uda, RAJA UDA', 'Butterworth', 'Pulau Pinang', 'https://maps.app.goo.gl/jpjmRcuU7obgTf2C7'),
-    ('KSL TCG ENTERPRISE', '39, Jalan Bukit Beruang Utama 2, Taman Bukit Beruang Utama', 'Ayer Keroh', 'Melaka', 'https://maps.app.goo.gl/xfnD3Hg3vxGyyj3n7'),
-    ('Hobibear Gaming', '52a, Jalan Cerdas, Taman Connaught', 'Kuala Lumpur', 'Wilayah Persekutuan Kuala Lumpur', 'https://maps.app.goo.gl/8WmtPjtkVWaP1ky37'),
-    ('Hans Arena', 'D 1-07 1st Floor Block D, NZX Commercial Centre, Jalan PJU 1A/41B, Ara Damansara', 'Petaling Jaya', 'Selangor', 'https://maps.app.goo.gl/Qa6HSvmAH93EQF2XA'),
-    ('Yume Card Studio', '50b, Jalan Jati 1, Taman Nusa Bestari Jaya', 'Skudai', 'Johor Darul Ta''zim', 'https://maps.app.goo.gl/HrEdGpqaMETZ6eog9'),
-    ('GUILDHALL PLT', 'UNIT D6-1-2 (2ND FLOOR), BLOCK D6, DANA 1, COMMERCIAL CENTRE, Jalan PJU 1a/46, Ara Damansara', 'Petaling Jaya', 'Selangor', 'https://maps.app.goo.gl/x8gBUoyXCYhRTucZA'),
-    ('Shuffle by Snacks & Ladders', '337, Jln Perak, Jelutong', 'Jelutong', 'Pulau Pinang', 'https://maps.app.goo.gl/uwAxSfaaTb7aZ56D6'),
-    ('SideDeck', '20-1, Jalan Impian Makmur 3/A, Saujana Impian', 'Kajang', 'Selangor', 'https://maps.app.goo.gl/VUik7NCcV1aUW6Rx9'),
-    ('Shuffle the duel field', '10, Jalan Austin Perdana 2/24, Taman Austin Perdana', 'Johor Bahru', 'Johor Darul Ta''zim', 'https://maps.app.goo.gl/odYFNVsQZsCr5jVcA'),
-    ('Gentoshi', '2nd Floor, Lot 10520, Block 16, KCLD, Jalan Tun Jugah', 'Kuching', 'Sarawak', 'https://maps.app.goo.gl/gmRqU5a1n1A9HmUq6'),
-    ('DeckOutDen', '15, Jln Reko Sentral 9, Reko Sentral', 'Kajang', 'Selangor', 'https://maps.app.goo.gl/TcwPKRUuqp9cfjNv9'),
-    ('Hobby Outpost Cheras', '1, Jalan C180/1, C180', 'Cheras', 'Selangor', 'https://maps.app.goo.gl/x2gCWibrTNRG6eG99'),
-    ('Storm Gate Games', 'Unit R-01-23A Emporis, Persiaran Surian, Kota Damansara', 'Petaling Jaya', 'Selangor', 'https://maps.app.goo.gl/RjYHVZtYCmznAxL56'),
-    ('Game On Boardgame Cafe', '199b, Jln PSK 5, Pekan Simpang Kuala', 'Alor Setar', 'Kedah', 'https://maps.app.goo.gl/GXjEHjfF34HNjjpo8'),
-    ('ZergHive TCG', '100, Jalan Pasar', 'Taiping', 'Perak', 'https://maps.app.goo.gl/8dgexE5MZykPLQ2b9')
-) as v(name, address, city, state, google_maps_url)
-join stores s on s.name = v.name
-on conflict (store_id, name) do update set
-  address = excluded.address,
-  city = excluded.city,
-  state = excluded.state,
-  country = excluded.country,
-  google_maps_url = excluded.google_maps_url,
-  address_status = excluded.address_status,
-  is_verified = excluded.is_verified,
-  is_active = excluded.is_active;
-
-insert into events (season_id, store_id, venue_id, event_type, title, date, date_tbd, status, visibility, notes, maps_url, external_url, is_active)
-select
-  (select id from seasons where slug = 'prd-2026'),
-  s.id,
-  v.id,
-  'store_championship',
-  s.name || ' Store Championship',
-  case when e.date_raw = 'TBD' then null else to_date(e.date_raw, 'DD-Mon-YYYY') end,
-  (e.date_raw = 'TBD'),
-  case when e.date_raw = 'TBD' then 'tbd' else 'scheduled' end,
-  'visible',
-  case when e.date_raw = 'TBD' then 'Date still TBD for PRD season' else 'PRD season store championship' end,
-  e.maps_url,
-  null,
-  true
-from (
-  values
-    ('Saikou Cards, Figurines, and Collectibles', '26-Sep-2026', 'https://maps.app.goo.gl/LV4vA9RZwsXTBBgi7'),
-    ('The Collectors Hut', '26-Sep-2026', 'https://maps.app.goo.gl/5JBdxsC1HZrRcJQ17'),
-    ('The Weatherlight Enterprise', '27-Sep-2026', 'https://maps.app.goo.gl/uz7zHJ25WSDusdBA9'),
-    ('Aexern', '27-Sep-2026', 'https://maps.app.goo.gl/QtHbWuniwdf3ojoeA'),
-    ('Neko Neko Nyaa', '27-Sep-2026', 'https://maps.app.goo.gl/gU67j7zAEYpsL7XFA'),
-    ('RoundTable Hobbies', '27-Sep-2026', 'https://maps.app.goo.gl/7ufLWujrUQpQDRYu6'),
-    ('HOBBY MAKER', '03-Oct-2026', 'https://maps.app.goo.gl/mvi2uRjmMWVEG5eQ9'),
-    ('Gaia Card Game Sanctuary', '03-Oct-2026', 'https://maps.app.goo.gl/XAsLrRXUp2syetqA8'),
-    ('Favonia Hobbies', '04-Oct-2026', 'https://maps.app.goo.gl/pE9DTij4JHrN3PXy5'),
-    ('Gathering Hub', '04-Oct-2026', 'https://maps.app.goo.gl/WuHGx1SyaHw63oYV8'),
-    ('The Card Shop PLT', '04-Oct-2026', 'https://maps.app.goo.gl/xBTaJBugJwTKNgDg6'),
-    ('Game and Glory Sdn Bhd', '10-Oct-2026', 'https://maps.app.goo.gl/NCmMtD3DnxhT6VFH8'),
-    ('YOLO TCG PARK', '10-Oct-2026', 'https://maps.app.goo.gl/8PsfUYHETu7fR5qC6'),
-    ('Hobby Lords Malaysia', '10-Oct-2026', 'https://maps.app.goo.gl/41TR3xyJEFfyxW9A6'),
-    ('Games Haven BBK', '10-Oct-2026', 'https://maps.app.goo.gl/HGkaty2GFwXCjRNe7'),
-    ('Tabletop Arena', '11-Oct-2026', 'https://maps.app.goo.gl/bCguivVXrAWV9McJ7'),
-    ('Spectre', '11-Oct-2026', 'https://maps.app.goo.gl/9fKp1bpWTc6KZQR56'),
-    ('Kado', '17-Oct-2026', 'https://maps.app.goo.gl/5eKWPaTRdQMwktFX7'),
-    ('MVP Hobbies & Collectibles Sdn Bhd', '17-Oct-2026', 'https://maps.app.goo.gl/S1iFnnbUK49kGa7p9'),
-    ('SGC Card Cafe', '18-Oct-2026', 'https://maps.app.goo.gl/1jhR4ybMUkqMsg4m7'),
-    ('Astral Rift Tactics Shop', '24-Oct-2026', 'https://maps.app.goo.gl/UnRjdLaH6fkz5fZv6'),
-    ('Monxter', '24-Oct-2026', 'https://maps.app.goo.gl/7SrETCZmbTK4YSZS9'),
-    ('Kamenn Enterprise', '24-Oct-2026', 'https://maps.app.goo.gl/6d5b1d5APnPiP3Kt6'),
-    ('Living Legends Enterprise', '25-Oct-2026', 'https://maps.app.goo.gl/gumrMDMvTbxAU6se8'),
-    ('Vincent''s Card Colosseum', '25-Oct-2026', 'https://maps.app.goo.gl/KhGLt53DAz1Vq7mY7'),
-    ('Yugoco TCG & Games', '25-Oct-2026', 'https://maps.app.goo.gl/NUD4PAGCMR2rntWh7'),
-    ('CARDFIGHT BUDDY ENTERPRISE', '31-Oct-2026', 'https://maps.app.goo.gl/jpjmRcuU7obgTf2C7'),
-    ('KSL TCG ENTERPRISE', '31-Oct-2026', 'https://maps.app.goo.gl/xfnD3Hg3vxGyyj3n7'),
-    ('Hobibear Gaming', '31-Oct-2026', 'https://maps.app.goo.gl/8WmtPjtkVWaP1ky37'),
-    ('Hans Arena', '01-Nov-2026', 'https://maps.app.goo.gl/Qa6HSvmAH93EQF2XA'),
-    ('Yume Card Studio', '01-Nov-2026', 'https://maps.app.goo.gl/HrEdGpqaMETZ6eog9'),
-    ('GUILDHALL PLT', '07-Nov-2026', 'https://maps.app.goo.gl/x8gBUoyXCYhRTucZA'),
-    ('Shuffle by Snacks & Ladders', '07-Nov-2026', 'https://maps.app.goo.gl/uwAxSfaaTb7aZ56D6'),
-    ('SideDeck', '08-Nov-2026', 'https://maps.app.goo.gl/VUik7NCcV1aUW6Rx9'),
-    ('Shuffle the duel field', '08-Nov-2026', 'https://maps.app.goo.gl/odYFNVsQZsCr5jVcA'),
-    ('Gentoshi', '08-Nov-2026', 'https://maps.app.goo.gl/gmRqU5a1n1A9HmUq6'),
-    ('DeckOutDen', '15-Nov-2026', 'https://maps.app.goo.gl/TcwPKRUuqp9cfjNv9'),
-    ('Hobby Outpost Cheras', '15-Nov-2026', 'https://maps.app.goo.gl/x2gCWibrTNRG6eG99'),
-    ('Storm Gate Games', '22-Nov-2026', 'https://maps.app.goo.gl/RjYHVZtYCmznAxL56'),
-    ('Game On Boardgame Cafe', 'TBD', 'https://maps.app.goo.gl/GXjEHjfF34HNjjpo8'),
-    ('ZergHive TCG', 'TBD', 'https://maps.app.goo.gl/8dgexE5MZykPLQ2b9')
-) as e(name, date_raw, maps_url)
-join stores s on s.name = e.name
-join venues v on v.store_id = s.id and v.name = s.name
+insert into events (
+  season_id,
+  store_id,
+  event_type,
+  title,
+  date,
+  date_tbd,
+  status,
+  visibility,
+  notes,
+  maps_url,
+  external_url,
+  is_active
+)
+values
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'malaysia-regional-1'), 'regional', 'Malaysia Regional 1', '2026-09-26', false, 'scheduled', 'visible', 'Regional tournament - location TBC', 'https://www.google.com/maps', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'malaysia-regional-2'), 'regional', 'Malaysia Regional 2', '2026-10-03', false, 'scheduled', 'visible', 'Regional tournament - location TBC', 'https://www.google.com/maps', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'saikou-cards-figurines-and-collectibles'), 'store_championship', 'Saikou Cards, Figurines, and Collectibles Store Championship', '2026-09-26', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/LV4vA9RZwsXTBBgi7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'the-collectors-hut'), 'store_championship', 'The Collectors Hut Store Championship', '2026-09-26', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/5JBdxsC1HZrRcJQ17', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'the-weatherlight-enterprise'), 'store_championship', 'The Weatherlight Enterprise Store Championship', '2026-09-27', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/uz7zHJ25WSDusdBA9', '/stores/the-weatherlight-enterprise', true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'aexern'), 'store_championship', 'Aexern Store Championship', '2026-09-27', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/QtHbWuniwdf3ojoeA', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'neko-neko-nyaa'), 'store_championship', 'Neko Neko Nyaa Store Championship', '2026-09-27', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/gU67j7zAEYpsL7XFA', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'roundtable-hobbies'), 'store_championship', 'RoundTable Hobbies Store Championship', '2026-09-27', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/7ufLWujrUQpQDRYu6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'hobby-maker'), 'store_championship', 'HOBBY MAKER Store Championship', '2026-10-03', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/mvi2uRjmMWVEG5eQ9', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'gaia-card-game-sanctuary'), 'store_championship', 'Gaia Card Game Sanctuary Store Championship', '2026-10-03', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/XAsLrRXUp2syetqA8', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'favonia-hobbies'), 'store_championship', 'Favonia Hobbies Store Championship', '2026-10-04', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/pE9DTij4JHrN3PXy5', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'gathering-hub'), 'store_championship', 'Gathering Hub Store Championship', '2026-10-04', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/WuHGx1SyaHw63oYV8', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'the-card-shop-plt'), 'store_championship', 'The Card Shop PLT Store Championship', '2026-10-04', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/xBTaJBugJwTKNgDg6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'game-and-glory-sdn-bhd'), 'store_championship', 'Game and Glory Sdn Bhd Store Championship', '2026-10-10', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/NCmMtD3DnxhT6VFH8', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'yolo-tcg-park'), 'store_championship', 'YOLO TCG PARK Store Championship', '2026-10-10', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/8PsfUYHETu7fR5qC6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'hobby-lords-malaysia'), 'store_championship', 'Hobby Lords Malaysia Store Championship', '2026-10-10', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/41TR3xyJEFfyxW9A6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'games-haven-bbk'), 'store_championship', 'Games Haven BBK Store Championship', '2026-10-10', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/HGkaty2GFwXCjRNe7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'tabletop-arena'), 'store_championship', 'Tabletop Arena Store Championship', '2026-10-11', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/bCguivVXrAWV9McJ7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'spectre'), 'store_championship', 'Spectre Store Championship', '2026-10-11', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/9fKp1bpWTc6KZQR56', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'kado'), 'store_championship', 'Kado Store Championship', '2026-10-17', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/5eKWPaTRdQMwktFX7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'mvp-hobbies-collectibles-sdn-bhd'), 'store_championship', 'MVP Hobbies & Collectibles Sdn Bhd Store Championship', '2026-10-17', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/S1iFnnbUK49kGa7p9', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'sgc-card-cafe'), 'store_championship', 'SGC Card Cafe Store Championship', '2026-10-18', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/1jhR4ybMUkqMsg4m7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'astral-rift-tactics-shop'), 'store_championship', 'Astral Rift Tactics Shop Store Championship', '2026-10-24', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/UnRjdLaH6fkz5fZv6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'monxter'), 'store_championship', 'Monxter Store Championship', '2026-10-24', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/7SrETCZmbTK4YSZS9', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'kamenn-enterprise'), 'store_championship', 'Kamenn Enterprise Store Championship', '2026-10-24', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/6d5b1d5APnPiP3Kt6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'living-legends-enterprise'), 'store_championship', 'Living Legends Enterprise Store Championship', '2026-10-25', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/gumrMDMvTbxAU6se8', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'vincents-card-colosseum'), 'store_championship', 'Vincent''s Card Colosseum Store Championship', '2026-10-25', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/KhGLt53DAz1Vq7mY7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'yugoco-tcg-games'), 'store_championship', 'Yugoco TCG & Games Store Championship', '2026-10-25', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/NUD4PAGCMR2rntWh7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'cardfight-buddy-enterprise'), 'store_championship', 'CARDFIGHT BUDDY ENTERPRISE Store Championship', '2026-10-31', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/jpjmRcuU7obgTf2C7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'ksl-tcg-enterprise'), 'store_championship', 'KSL TCG ENTERPRISE Store Championship', '2026-10-31', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/xfnD3Hg3vxGyyj3n7', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'hobibear-gaming'), 'store_championship', 'Hobibear Gaming Store Championship', '2026-10-31', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/8WmtPjtkVWaP1ky37', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'hans-arena'), 'store_championship', 'Hans Arena Store Championship', '2026-11-01', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/Qa6HSvmAH93EQF2XA', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'yume-card-studio'), 'store_championship', 'Yume Card Studio Store Championship', '2026-11-01', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/HrEdGpqaMETZ6eog9', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'guildhall-plt'), 'store_championship', 'GUILDHALL PLT Store Championship', '2026-11-07', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/x8gBUoyXCYhRTucZA', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'shuffle-by-snacks-ladders'), 'store_championship', 'Shuffle by Snacks & Ladders Store Championship', '2026-11-07', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/uwAxSfaaTb7aZ56D6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'sidedeck'), 'store_championship', 'SideDeck Store Championship', '2026-11-08', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/VUik7NCcV1aUW6Rx9', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'shuffle-the-duel-field'), 'store_championship', 'Shuffle the duel field Store Championship', '2026-11-08', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/odYFNVsQZsCr5jVcA', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'gentoshi'), 'store_championship', 'Gentoshi Store Championship', '2026-11-08', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/gmRqU5a1n1A9HmUq6', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'deckoutden'), 'store_championship', 'DeckOutDen Store Championship', '2026-11-15', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/TcwPKRUuqp9cfjNv9', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'hobby-outpost-cheras'), 'store_championship', 'Hobby Outpost Cheras Store Championship', '2026-11-15', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/x2gCWibrTNRG6eG99', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'storm-gate-games'), 'store_championship', 'Storm Gate Games Store Championship', '2026-11-22', false, 'scheduled', 'visible', 'PRD season store championship', 'https://maps.app.goo.gl/RjYHVZtYCmznAxL56', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'game-on-boardgame-cafe'), 'store_championship', 'Game On Boardgame Cafe Store Championship', null, true, 'tbd', 'visible', 'Date still TBD for PRD season', 'https://maps.app.goo.gl/GXjEHjfF34HNjjpo8', null, true),
+  ((select id from seasons where slug = 'prd-2026'), (select id from stores where slug = 'zerghive-tcg'), 'store_championship', 'ZergHive TCG Store Championship', null, true, 'tbd', 'visible', 'Date still TBD for PRD season', 'https://maps.app.goo.gl/8dgexE5MZykPLQ2b9', null, true)
 on conflict (season_id, store_id, title) do update set
-  venue_id = excluded.venue_id,
   event_type = excluded.event_type,
   date = excluded.date,
   date_tbd = excluded.date_tbd,
@@ -258,7 +199,9 @@ on conflict (season_id, store_id, title) do update set
   is_active = excluded.is_active,
   updated_at = now();
 
-create or replace view season_event_summary as
+drop view if exists season_event_summary;
+
+create view season_event_summary as
 select
   e.id,
   s.slug as season_slug,
@@ -269,12 +212,16 @@ select
   e.date_tbd,
   e.status,
   e.visibility,
-  v.address_status,
-  v.is_verified,
-  v.google_maps_url
+  coalesce(st.region, v.state, 'TBC') as state,
+  e.maps_url as google_maps_url,
+  case
+    when e.event_type = 'regional' then false
+    when v.is_verified is not null then v.is_verified
+    else true
+  end as is_verified
 from events e
 join seasons s on s.id = e.season_id
 join stores st on st.id = e.store_id
 left join venues v on v.id = e.venue_id;
 
-select 'PRD season data corrected and ready' as status;
+select 'PRD season data ready' as status;

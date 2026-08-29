@@ -5,8 +5,18 @@ window.GA_HORIZON_CONFIG = window.GA_HORIZON_CONFIG || {
   supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjemRyb2dvaWZrbWRoaHFkZGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5OTc5NDMsImV4cCI6MjEwMzU3Mzk0M30.SGiSh4uyK5LjnpkkmwHSBX-nnRlpgxv5D4uiMiMlMD8',
   fallbackEvents: [
     {
-      store: 'Malaysia Regional',
+      store: 'Malaysia Regional 1',
       date: '2026-09-26',
+      address: 'TBC',
+      state: 'TBC',
+      verified: false,
+      type: 'regional',
+      mapsUrl: 'https://www.google.com/maps',
+      isTBD: false
+    },
+    {
+      store: 'Malaysia Regional 2',
+      date: '2026-10-03',
       address: 'TBC',
       state: 'TBC',
       verified: false,
