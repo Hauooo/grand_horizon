@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Archive Index — MY Store Championships</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --ink-0: #101220;
+  --ink-1: #1A1D2E;
+  --ink-2: #23273B;
+  --line: #33384f;
+  --parchment: #EAE3D2;
+  --parchment-mute: #8f8b7c;
+  --gold: #C9A24B;
+  --gold-bright: #E4C878;
+  --water: #3A7CA5;
+  --amber: #C97B3A;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin:0;
+  background: radial-gradient(ellipse 120% 80% at 50% -10%, #1c1f33 0%, var(--ink-0) 55%);
+  color: var(--parchment);
+  font-family: 'Work Sans', sans-serif;
+  min-height: 100vh;
+  padding: 0 0 80px 0;
+}
+
+body::before{
+  content:"";
+  position: fixed; inset:0;
+  background-image: radial-gradient(rgba(234,227,210,0.025) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events:none;
+  z-index: 0;
+}
+
+.wrap{ max-width: 1040px; margin: 0 auto; padding: 0 32px; position:relative; z-index:1; }
+
+header{ padding: 56px 0 28px 0; border-bottom: 1px solid var(--line); }
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); margin: 0 0 14px 0;
+  display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before{ content:""; width:22px; height:1px; background: var(--gold); display:inline-block; }
+
+h1{
+  font-family:'Fraunces', serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 50px;
+  line-height: 1.02;
+  margin: 0 0 14px 0;
+  letter-spacing: -0.01em;
+}
+h1 em{ font-style: italic; font-weight: 500; color: var(--gold-bright); }
+
+.subline{
+  font-size: 15px; color: var(--parchment-mute); max-width: 600px; line-height: 1.55; margin: 0;
+}
+
+.controls{
+  display:flex; gap: 14px; align-items:center; flex-wrap: wrap;
+  padding: 26px 0 24px 0;
+}
+.search-box{ flex: 1 1 220px; position: relative; }
+.search-box input{
+  width: 100%;
+  background: var(--ink-1);
+  border: 1px solid var(--line);
+  color: var(--parchment);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 14px;
+  padding: 11px 14px 11px 36px;
+  border-radius: 4px;
+  outline: none;
+}
+.search-box input::placeholder{ color: var(--parchment-mute); }
+.search-box input:focus{ border-color: var(--gold); }
+.search-box svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.5; width:14px; height:14px; }
+
+select{
+  background: var(--ink-1);
+  border: 1px solid var(--line);
+  color: var(--parchment);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+select:focus{ border-color: var(--gold); }
+
+.toggle-group{ display:flex; border: 1px solid var(--line); border-radius: 4px; overflow:hidden; }
+.toggle-group button{
+  background: var(--ink-1); color: var(--parchment-mute);
+  border:none; font-family:'IBM Plex Mono', monospace; font-size:12px;
+  padding: 10px 14px; cursor:pointer; letter-spacing:.03em; white-space:nowrap;
+}
+.toggle-group button.on{ background: var(--ink-2); color: var(--gold-bright); }
+
+.tally{
+  display:flex; margin: 6px 0 34px 0;
+  border: 1px solid var(--line); border-radius: 6px; overflow:hidden;
+}
+.tally div{ flex:1; padding: 16px 20px; border-right: 1px solid var(--line); }
+.tally div:last-child{ border-right:none; }
+.tally .num{ font-family:'Fraunces', serif; font-size: 26px; color: var(--gold-bright); font-weight: 600; }
+.tally .lbl{ font-family:'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--parchment-mute); margin-top: 4px; }
+
+.month-divider{ display:flex; align-items:center; gap: 14px; margin: 40px 0 16px 0; }
+.month-divider:first-child{ margin-top: 0; }
+.month-divider .label{
+  font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing:.12em; text-transform:uppercase;
+  color: var(--gold); white-space:nowrap;
+}
+.month-divider .rule{ flex:1; height:1px; background: var(--line); }
+.month-divider .count{ font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--parchment-mute); }
+
+.grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+
+.card{
+  background: var(--ink-1);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 18px 20px 16px 20px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: rise .4s ease forwards;
+  transition: border-color .18s ease, transform .18s ease;
+}
+.card:hover{ border-color: var(--gold); transform: translateY(-2px); }
+.card::before{
+  content:"";
+  position:absolute; left:0; right:0; top:0; height:4px;
+  background-image: radial-gradient(circle, var(--ink-0) 2.2px, transparent 2.2px);
+  background-size: 10px 10px;
+  background-position: 0 -3px;
+}
+.event-link{
+  display:inline-block; margin-top: 12px; font-family:'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gold-bright); text-decoration: none; border-bottom: 1px solid rgba(233, 196, 120, .42);
+}
+.event-link:hover{ color: var(--parchment); border-color: rgba(234,227,210,.75); }
+.map-link{
+  display:inline-block; margin-top: 8px; font-family:'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--water); text-decoration: none; border-bottom: 1px solid rgba(58,124,165,.5);
+}
+.map-link:hover{ color: var(--parchment); border-color: rgba(234,227,210,.75); }
+@keyframes rise{ to{ opacity:1; transform: translateY(0); } }
+
+.card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap: 10px; margin-bottom: 10px; }
+.seal{
+  width: 38px; height: 38px; border-radius: 50%; flex-shrink:0;
+  border: 1.5px solid var(--gold);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'IBM Plex Mono', monospace; font-size: 12px; color: var(--gold);
+}
+.seal.tbd{ border-color: var(--amber); color: var(--amber); font-size: 9px; }
+
+.unverified-flag{
+  font-family:'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--amber); border: 1px solid var(--amber); border-radius: 3px; padding: 3px 7px;
+  white-space:nowrap;
+}
+
+.store{ font-family:'Fraunces', serif; font-size: 19px; font-weight: 600; margin: 0; line-height:1.2; }
+.address{ font-size: 12px; color: var(--parchment-mute); margin-top: 6px; line-height:1.4; }
+.state-tag{
+  display:inline-block; font-size: 10.5px; font-family:'IBM Plex Mono', monospace;
+  color: var(--water); margin-top: 8px; letter-spacing:.03em;
+}
+
+.meta-row{
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:'IBM Plex Mono', monospace; font-size: 11.5px;
+  border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 12px;
+  color: var(--parchment-mute);
+}
+.meta-row .date{ color: var(--gold-bright); }
+.meta-row .date.tbd{ color: var(--amber); }
+
+.empty{
+  text-align:center; padding: 60px 20px; color: var(--parchment-mute);
+  font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+  border: 1px dashed var(--line); border-radius: 6px;
+}
+
+footer{
+  margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line);
+  font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--parchment-mute);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+
+@media (max-width: 640px){
+  h1{ font-size: 34px; }
+  .wrap{ padding: 0 18px; }
+  .tally{ flex-wrap:wrap; }
+  .tally div{ flex: 1 1 45%; border-bottom: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Grand Archive TCG · Malaysia</p>
+    <h1>Grand Archive <em>Horizon</em></h1>
+    <p class="subline">Store championships across Malaysia — locations cross-checked against Google Places. 4 of 41 stores couldn't be confidently matched and are flagged below.</p>
+  </header>
+
+  <div class="controls">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search by store name…">
+    </div>
+    <select id="stateFilter"></select>
+    <div class="toggle-group" id="statusToggle">
+      <button data-mode="all" class="on">All events</button>
+      <button data-mode="tbd">Date TBD</button>
+      <button data-mode="unverified">Needs address</button>
+    </div>
+  </div>
+
+  <div class="tally" id="tally"></div>
+
+  <div id="content"></div>
+
+  <footer>
+    <span>Source: your event log, 41 stores · 37 addresses verified via Google Places</span>
+    <span id="countLabel"></span>
+  </footer>
+
+</div>
+
+<script>
+const EVENTS = [{"store": "Saikou Cards, Figurines, and Collectibles", "date": "2026-09-26", "address": "First Floor, 34-1A, Jalan Puteri 1/2, Bandar Puteri Puchong, 47100 Puchong, Selangor, Malaysia", "lat": 3.02709, "lng": 101.6161338, "state": "Selangor", "verified": true}, {"store": "The Collectors Hut", "date": "2026-09-26", "address": "1401, Level, Above Route 66, 1, Jalan Shell, Lutong, 98000 Miri, Sarawak, Malaysia", "lat": 4.4732821, "lng": 114.0079648, "state": "Sarawak", "verified": true}, {"store": "The Weatherlight Enterprise", "date": "2026-09-27", "address": "29-1, Jalan USJ 10/1a, Taipan Business Centre, 47620 Subang Jaya, Selangor, Malaysia", "lat": 3.049664, "lng": 101.5851612, "state": "Selangor", "verified": true}, {"store": "Aexern", "date": "2026-09-27", "address": "52A, Block M, Jalan Raja Uda, Pusat Perniagaan Raja Uda, 12300 Butterworth, Pulau Pinang, Malaysia", "lat": 5.4163775, "lng": 100.3798185, "state": "Penang", "verified": true}, {"store": "Neko Neko Nyaa", "date": "2026-09-27", "address": "KCLD, Lot 2762, Block 10, 1st Floor, Q3A, Bormill Commercial Centre, 93150 Kuching, Sarawak, Malaysia", "lat": 1.5314093, "lng": 110.3371796, "state": "Sarawak", "verified": true}, {"store": "RoundTable Hobbies", "date": "2026-09-27", "address": "B-264, Tingkat 1, Jalan Beserah, Taman Beserah, 25300 Kuantan, Pahang, Malaysia", "lat": 3.826261, "lng": 103.3367388, "state": "Pahang", "verified": true}, {"store": "HOBBY MAKER", "date": "2026-10-03", "address": null, "lat": null, "lng": null, "state": null, "verified": false}, {"store": "Gaia Card Game Sanctuary", "date": "2026-10-03", "address": "Endah Parade, Jalan 1/149e, Taman Sri Endah, 57000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia", "lat": 3.0631155, "lng": 101.6950693, "state": "Kuala Lumpur", "verified": true}, {"store": "Favonia Hobbies", "date": "2026-10-04", "address": "12B, Persiaran Greentown 6, Greentown Business Centre, 30450 Ipoh, Perak, Malaysia", "lat": 4.599349, "lng": 101.094777, "state": "Perak", "verified": true}, {"store": "Gathering Hub", "date": "2026-10-04", "address": null, "lat": null, "lng": null, "state": null, "verified": false}, {"store": "The Card Shop PLT", "date": "2026-10-04", "address": "54A, Jln 19/3, Seksyen 19, 46300 Petaling Jaya, Selangor, Malaysia", "lat": 3.120107, "lng": 101.629222, "state": "Selangor", "verified": true}, {"store": "Game and Glory Sdn Bhd", "date": "2026-10-10", "address": "F-1, 42, Jalan PJU 1/45, Aman Suria, 47301 Petaling Jaya, Selangor, Malaysia", "lat": 3.1207726, "lng": 101.5966195, "state": "Selangor", "verified": true}, {"store": "YOLO TCG PARK", "date": "2026-10-10", "address": "Parcel no.2 - level 3, Of Bintulu Parkcity Commerce Square, 97000 Bintulu, Sarawak, Malaysia", "lat": 3.1832638, "lng": 113.0393721, "state": "Sarawak", "verified": true}, {"store": "Hobby Lords Malaysia", "date": "2026-10-10", "address": "31-1F, Persiaran Setia Utama, Setia Alam, 40170 Shah Alam, Selangor, Malaysia", "lat": 3.124617, "lng": 101.468958, "state": "Selangor", "verified": true}, {"store": "Games Haven BBK", "date": "2026-10-10", "address": "17, Lorong Tiara 1a, Bandar Baru Klang, 41150 Klang, Selangor, Malaysia", "lat": 3.063789, "lng": 101.4696705, "state": "Selangor", "verified": true}, {"store": "Tabletop Arena", "date": "2026-10-11", "address": "S-206, 2ND FLOOR, 1BORNEO HYPERMALL JALAN SULAMAN, 88450 Kota Kinabalu, Sabah, Malaysia", "lat": 6.0354466, "lng": 116.1291846, "state": "Sabah", "verified": true}, {"store": "Spectre", "date": "2026-10-11", "address": "9-1, Jalan PJS 8/13, Bandar Sunway, 46150 Subang Jaya, Selangor, Malaysia", "lat": 3.0780854, "lng": 101.6109343, "state": "Selangor", "verified": true}, {"store": "Kado", "date": "2026-10-17", "address": "2F, A0331, Block A, Eco Galleria Iskandar Puteri, 79100 Johor, Johor Darul Ta'zim, Malaysia", "lat": 1.4420908, "lng": 103.6157873, "state": "Johor", "verified": true}, {"store": "MVP Hobbies & Collectibles Sdn Bhd", "date": "2026-10-17", "address": "A-G-17, Ground Floor, Zenopy Shoplex, Jln LP 7/4, Lestari Perdana, 43300 Seri Kembangan, Selangor, Malaysia", "lat": 3.0076806, "lng": 101.668882, "state": "Selangor", "verified": true}, {"store": "SGC Card Cafe", "date": "2026-10-18", "address": "23-02, Jalan Suria 7, Bandar Baru Seri Alam, 81750 Masai, Johor Darul Ta'zim, Malaysia", "lat": 1.4945672, "lng": 103.874336, "state": "Johor", "verified": true}, {"store": "Astral Rift Tactics Shop", "date": "2026-10-24", "address": "8A, Medan Bercham Selatan 1, Medan Bercham Selatan, 31400 Ipoh, Perak, Malaysia", "lat": 4.6248104, "lng": 101.1204959, "state": "Perak", "verified": true}, {"store": "Monxter", "date": "2026-10-24", "address": "18-2, Jalan Menara Gading 1, Taman Connaught, 56000 Cheras, Wilayah Persekutuan Kuala Lumpur, Malaysia", "lat": 3.0806548, "lng": 101.7329081, "state": "Kuala Lumpur", "verified": true}, {"store": "Kamenn Enterprise", "date": "2026-10-24", "address": "55a, Jalan Perwira 2, Taman Ungku Tun Aminah, 81300 Skudai, Johor Darul Ta'zim, Malaysia", "lat": 1.5243612, "lng": 103.6644272, "state": "Johor", "verified": true}, {"store": "Living Legends Enterprise", "date": "2026-10-25", "address": "32A, Jalan Pingai, Taman Pelangi, 80400 Johor Bahru, Johor Darul Ta'zim, Malaysia", "lat": 1.482418, "lng": 103.7736237, "state": "Johor", "verified": true}, {"store": "Vincent's Card Colosseum", "date": "2026-10-25", "address": "Phase 1, Lot 2035, 2nd Floor, 98000 Miri, Sarawak, Malaysia", "lat": 4.3896416, "lng": 113.9795994, "state": "Sarawak", "verified": true}, {"store": "Yugoco TCG & Games", "date": "2026-10-25", "address": "NO 5, 1, Jalan PNBB 2, Pusat Niaga Bukit Baru, 75150 Melaka, Malaysia", "lat": 2.2181171, "lng": 102.2738441, "state": "Melaka", "verified": true}, {"store": "CARDFIGHT BUDDY ENTERPRISE", "date": "2026-10-31", "address": "141B, Pusat Perniagaan Raja Uda, Jalan Raja Uda, Raja Uda, 12300 Butterworth, Pulau Pinang, Malaysia", "lat": 5.4204401, "lng": 100.3807133, "state": "Penang", "verified": true}, {"store": "KSL TCG ENTERPRISE", "date": "2026-10-31", "address": null, "lat": null, "lng": null, "state": null, "verified": false}, {"store": "Hobibear Gaming", "date": "2026-10-31", "address": "52A, Jalan Cerdas, Taman Connaught, 56000 Cheras, Wilayah Persekutuan Kuala Lumpur, Malaysia", "lat": 3.0814057, "lng": 101.7376678, "state": "Kuala Lumpur", "verified": true}, {"store": "Hans Arena", "date": "2026-11-01", "address": "D 1-07 1st Floor Block D, NZX Commercial Centre, Jalan PJU 1A/41B, Ara Damansara, 47301 Petaling Jaya, Selangor, Malaysia", "lat": 3.1144209, "lng": 101.5895152, "state": "Selangor", "verified": true}, {"store": "Yume Card Studio", "date": "2026-11-01", "address": "50b, Jalan Jati 1, Taman Nusa Bestari Jaya, 81300 Skudai, Johor Darul Ta'zim, Malaysia", "lat": 1.5002552, "lng": 103.6561234, "state": "Johor", "verified": true}, {"store": "GUILDHALL PLT", "date": "2026-11-07", "address": "Unit D6-1-2 (2nd Floor), Block D6, Dana 1 Commercial Centre, Jalan PJU 1a/46, Ara Damansara, 47301 Petaling Jaya, Selangor, Malaysia", "lat": 3.111065, "lng": 101.5843486, "state": "Selangor", "verified": true}, {"store": "Shuffle by Snacks & Ladders", "date": "2026-11-07", "address": "337m, 2, Jalan Perak, Taman Ara, 11600 Jelutong, Pulau Pinang, Malaysia", "lat": 5.3994364, "lng": 100.3151915, "state": "Penang", "verified": true}, {"store": "SideDeck", "date": "2026-11-08", "address": null, "lat": null, "lng": null, "state": null, "verified": false}, {"store": "Shuffle the duel field", "date": "2026-11-08", "address": "10-01, Jalan Austin Perdana 2/24, Taman Austin Perdana, 81100 Johor Bahru, Johor Darul Ta'zim, Malaysia", "lat": 1.5478277, "lng": 103.7813303, "state": "Johor", "verified": true}, {"store": "Gentoshi", "date": "2026-11-08", "address": "2nd Floor, Lot 10520, Block 16, KCLD, Jalan Tun Jugah, 93350 Kuching, Sarawak, Malaysia", "lat": 1.5263638, "lng": 110.3568156, "state": "Sarawak", "verified": true}, {"store": "DeckOutDen", "date": "2026-11-15", "address": "15-1, Jln Reko Sentral 9, Reko Sentral, 43000 Kajang, Selangor, Malaysia", "lat": 2.9684518, "lng": 101.7889542, "state": "Selangor", "verified": true}, {"store": "Hobby Outpost Cheras", "date": "2026-11-15", "address": "C-63, 1, Jalan C180/1, Dataran C180, 43200 Cheras, Selangor, Malaysia", "lat": 3.0374001, "lng": 101.7656454, "state": "Selangor", "verified": true}, {"store": "Storm Gate Games", "date": "2026-11-22", "address": "R-3A-27 Emporis, Persiaran Surian, Kota Damansara, 47810 Petaling Jaya, Selangor, Malaysia", "lat": 3.1566716, "lng": 101.5719776, "state": "Selangor", "verified": true}, {"store": "Game On Boardgame Cafe", "date": null, "address": "199B, Jln PSK 5, Pekan Simpang Kuala, 05400 Alor Setar, Kedah, Malaysia", "lat": 6.1007197, "lng": 100.3652762, "state": "Kedah", "verified": true}, {"store": "ZergHive TCG", "date": null, "address": "100, Jalan Pasar, 34000 Taiping, Perak, Malaysia", "lat": 4.8525214, "lng": 100.74076, "state": "Perak", "verified": true}];
+
+let mode = "all";
+let searchTerm = "";
+let stateFilter = "all";
+
+document.getElementById('searchInput').oninput = (e) => { searchTerm = e.target.value.toLowerCase(); render(); };
+document.querySelectorAll('#statusToggle button').forEach(btn => {
+  btn.onclick = () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('#statusToggle button').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    render();
+  };
+});
+
+const states = [...new Set(EVENTS.filter(e => e.state).map(e => e.state))].sort();
+const stateSelect = document.getElementById('stateFilter');
+stateSelect.innerHTML = '<option value="all">All states</option>' + states.map(s => `<option value="${s}">${s}</option>`).join('');
+stateSelect.onchange = (e) => { stateFilter = e.target.value; render(); };
+
+function monthLabel(iso){
+  if(!iso) return "Date TBD";
+  const dt = new Date(iso + "T00:00:00");
+  return dt.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+}
+function dayLabel(iso){
+  if(!iso) return "TBD";
+  const dt = new Date(iso + "T00:00:00");
+  return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+}
+function dayNum(iso){
+  if(!iso) return "?";
+  return new Date(iso + "T00:00:00").getDate();
+}
+
+function render(){
+  const filtered = EVENTS.filter(e =>
+    (mode === "all" || (mode === "tbd" && !e.date) || (mode === "unverified" && !e.verified)) &&
+    (stateFilter === "all" || e.state === stateFilter) &&
+    (searchTerm === "" || e.store.toLowerCase().includes(searchTerm))
+  );
+
+  const tbdCount = EVENTS.filter(e => !e.date).length;
+  const unverifiedCount = EVENTS.filter(e => !e.verified).length;
+  const monthsCount = new Set(EVENTS.filter(e => e.date).map(e => e.date.slice(0,7))).size;
+
+  document.getElementById('tally').innerHTML = `
+    <div><div class="num">${EVENTS.length}</div><div class="lbl">Total events</div></div>
+    <div><div class="num">${states.length}</div><div class="lbl">States covered</div></div>
+    <div><div class="num">${tbdCount}</div><div class="lbl">Date TBD</div></div>
+    <div><div class="num">${unverifiedCount}</div><div class="lbl">Needs address</div></div>
+  `;
+
+  const content = document.getElementById('content');
+
+  if(filtered.length === 0){
+    content.innerHTML = '<div class="empty">No events match — try clearing a filter.</div>';
+    document.getElementById('countLabel').textContent = `Showing 0 of ${EVENTS.length}`;
+    return;
+  }
+
+  const sorted = [...filtered].sort((a,b) => {
+    if(!a.date && !b.date) return 0;
+    if(!a.date) return 1;
+    if(!b.date) return -1;
+    return a.date.localeCompare(b.date);
+  });
+
+  const groups = [];
+  let lastKey = null;
+  sorted.forEach(e => {
+    const key = e.date ? e.date.slice(0,7) : "TBD";
+    if(key !== lastKey){
+      groups.push({ key, label: monthLabel(e.date), items: [] });
+      lastKey = key;
+    }
+    groups[groups.length-1].items.push(e);
+  });
+
+  content.innerHTML = groups.map(g => `
+    <div class="month-divider">
+      <span class="label">${g.label}</span>
+      <span class="rule"></span>
+      <span class="count">${g.items.length} event${g.items.length === 1 ? '' : 's'}</span>
+    </div>
+    <div class="grid">
+      ${g.items.map((e, i) => `
+        <div class="card" style="animation-delay:${i * 0.02}s">
+          <div class="card-top">
+            <div class="seal ${e.date ? '' : 'tbd'}">${e.date ? dayNum(e.date) : 'TBD'}</div>
+            ${!e.verified ? '<span class="unverified-flag">Unconfirmed</span>' : ''}
+          </div>
+          <div class="store">${e.store}</div>
+          ${e.address ? `<div class="address">${e.address}</div>` : '<div class="address">Address not yet confirmed</div>'}
+          ${e.state ? `<span class="state-tag">${e.state}</span>` : ''}
+          ${e.address ? `<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener noreferrer">Navigate</a>` : ''}
+          ${e.store === 'The Weatherlight Enterprise' ? '<a class="event-link" href="The%20Weatherlight%20Enterprise/index.html">View event info</a>' : ''}
+          <div class="meta-row">
+            <span class="date ${e.date ? '' : 'tbd'}">${e.date ? dayLabel(e.date) : 'Date TBD'}</span>
+            <span>Store Championship</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  document.getElementById('countLabel').textContent = `Showing ${filtered.length} of ${EVENTS.length}`;
+}
+
+render();
+</script>
+</body>
+</html>
