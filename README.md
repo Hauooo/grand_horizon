@@ -16,7 +16,6 @@ This project is designed to help players and organizers keep tabs on:
 
 - `index.html` — the main season/event index page
 - `PRD Shore Champs Malaysia.csv` — source event data for the PRD season
-- `The Weatherlight Enterprise/` — store-specific event detail page and assets
 
 ## Local usage
 
