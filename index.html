@@ -467,7 +467,7 @@ footer{
     const states = [...new Set(events.map(event => normalizeState(event.state)))].sort();
     const current = normalizeState(stateFilter.value);
     stateFilter.innerHTML = '<option value="all">All regions</option>' + states.map(state => `<option value="${state}">${state}</option>`).join('');
-    stateFilter.value = states.includes(current) ? current : 'all';
+    stateFilter.value = 'all';
   }
 
   function applyFilters(events) {
