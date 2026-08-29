@@ -286,6 +286,7 @@ footer{
 
   <footer>
     <span>Grand Horizon — MY Store Championships</span>
+    <span id="countLabel">0 visible</span>
     <span>Grand Archive TCG and their logos are trademarks of Weebs of the Shore LLC.</span>
   </footer>
 
@@ -394,6 +395,10 @@ footer{
     return Array.isArray(data) ? data.map(mapRowToEvent) : (DEFAULT_EVENTS || []).map(normalizeEvent);
   }
 
+  function normalizeState(value) {
+    return String(value || 'TBC').trim();
+  }
+
   function renderTally(events) {
     const all = events.length;
     const tbd = events.filter(e => e.isTBD || e.date === 'TBD').length;
@@ -459,20 +464,21 @@ footer{
   const countLabel = document.getElementById('countLabel');
 
   function refreshStates(events) {
-    const states = [...new Set(events.map(event => event.state || 'TBC'))].sort();
-    const current = stateFilter.value;
+    const states = [...new Set(events.map(event => normalizeState(event.state)))].sort();
+    const current = normalizeState(stateFilter.value);
     stateFilter.innerHTML = '<option value="all">All regions</option>' + states.map(state => `<option value="${state}">${state}</option>`).join('');
     stateFilter.value = states.includes(current) ? current : 'all';
   }
 
   function applyFilters(events) {
     const term = searchInput.value.trim().toLowerCase();
-    const state = stateFilter.value;
+    const selectedState = normalizeState(stateFilter.value);
     const mode = document.querySelector('#statusToggle button.on')?.dataset.mode || 'all';
 
     const filtered = events.filter(event => {
-      const matchesSearch = !term || event.store.toLowerCase().includes(term);
-      const matchesState = state === 'all' || event.state === state;
+      const eventState = normalizeState(event.state);
+      const matchesSearch = !term || (event.store || '').toLowerCase().includes(term);
+      const matchesState = selectedState === 'all' || eventState === selectedState;
       const matchesMode = mode === 'all' ? true : mode === 'tbd' ? event.isTBD : !event.verified;
 
       return matchesSearch && matchesState && matchesMode;
@@ -480,10 +486,17 @@ footer{
 
     renderTally(filtered);
     renderEvents(filtered);
-    countLabel.textContent = `${filtered.length} visible`;
+    if (countLabel) {
+      countLabel.textContent = `${filtered.length} visible`;
+    }
   }
 
   async function init() {
+    if (!searchInput || !stateFilter || !statusToggle || !countLabel) {
+      console.error('GA Horizon UI missing required elements.');
+      return;
+    }
+
     await hydrateRuntimeConfig();
 
     const EVENTS = await loadEvents();
