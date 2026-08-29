@@ -7,7 +7,7 @@ GA_Horizon is a lightweight Grand Archive season companion focused on Malaysia. 
 The site is designed to keep event information easy to scan and quick to use in practice:
 
 - weekly store events and championships
-- PRD season tracking across the active tournament window
+- season tracking across the active tournament window
 - regional event listings with a separate visual treatment
 - official venue data and Google Maps navigation links
 - basic season status metadata, including the current season guide
