@@ -50,6 +50,27 @@ Then open:
 http://localhost:8000
 ```
 
+## Supabase integration
+
+The site is prepared to load PRD season event data from Supabase when configured.
+
+1. Create a Supabase project.
+2. Run the SQL in `prd-season-supabase.sql` against your database.
+3. Open `supabase-config.js` and replace the placeholder values:
+
+```js
+window.GA_HORIZON_CONFIG = {
+  useSupabase: true,
+  seasonSlug: 'prd-2026',
+  supabaseUrl: 'https://YOUR_PROJECT_REF.supabase.co',
+  supabaseAnonKey: 'YOUR_SUPABASE_ANON_KEY'
+};
+```
+
+4. Refresh the page. If the values are valid, the site will load from the `season_event_summary` view instead of the local fallback data.
+
+If `useSupabase` is `false`, or the values are not configured, the page falls back to a small built-in preview data set so the UI still works locally.
+
 ## Deployment
 
 The site is compatible with static hosting such as Vercel. For deployment, the project folder can be published as the site root with no build step required.

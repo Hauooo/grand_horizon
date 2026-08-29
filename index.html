@@ -285,150 +285,184 @@ footer{
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./supabase-config.js"></script>
 <script>
-const EVENTS = [{"store": "Malaysia Regional", "date": "2026-09-26", "address": "TBC", "lat": null, "lng": null, "state": "TBC", "verified": false, "type": "regional"}, {"store": "Saikou Cards, Figurines, and Collectibles", "date": "2026-09-26", "address": "First Floor, 34-1A, Jalan Puteri 1/2, Bandar Puteri Puchong, 47100 Puchong, Selangor, Malaysia", "lat": 3.02709, "lng": 101.6161338, "state": "Selangor", "verified": true, "type": "store"}, {"store": "The Collectors Hut", "date": "2026-09-26", "address": "1401, Level, Above Route 66, 1, Jalan Shell, Lutong, 98000 Miri, Sarawak, Malaysia", "lat": 4.4732821, "lng": 114.0079648, "state": "Sarawak", "verified": true, "type": "store"}, {"store": "The Weatherlight Enterprise", "date": "2026-09-27", "address": "29-1, Jalan USJ 10/1a, Taipan Business Centre, 47620 Subang Jaya, Selangor, Malaysia", "lat": 3.049664, "lng": 101.5851612, "state": "Selangor", "verified": true, "type": "store"}, {"store": "Aexern", "date": "2026-09-27", "address": "52A, Block M, Jalan Raja Uda, Pusat Perniagaan Raja Uda, 12300 Butterworth, Pulau Pinang, Malaysia", "lat": 5.4163775, "lng": 100.3798185, "state": "Penang", "verified": true, "type": "store"}, {"store": "Neko Neko Nyaa", "date": "2026-09-27", "address": "KCLD, Lot 2762, Block 10, 1st Floor, Q3A, Bormill Commercial Centre, 93150 Kuching, Sarawak, Malaysia", "lat": 1.5314093, "lng": 110.3371796, "state": "Sarawak", "verified": true, "type": "store"}, {"store": "RoundTable Hobbies", "date": "2026-09-27", "address": "B-264, Tingkat 1, Jalan Beserah, Taman Beserah, 25300 Kuantan, Pahang, Malaysia", "lat": 3.826261, "lng": 103.3367388, "state": "Pahang", "verified": true, "type": "store"}, {"store": "Malaysia Regional", "date": "2026-10-03", "address": "TBC", "lat": null, "lng": null, "state": "TBC", "verified": false, "type": "regional"}, {"store": "HOBBY MAKER", "date": "2026-10-03", "address": "4-22, Pragin Mall, Jalan Dr Lim Chwee Leong, Pulau Pinang, 10100 George Town, Pulau Pinang, Malaysia", "lat": 5.4166, "lng": 100.3345, "state": "Penang", "verified": true, "type": "store"}, {"store": "Gaia Card Game Sanctuary", "date": "2026-10-03", "address": "Endah Parade, Jalan 1/149e, Taman Sri Endah, 57000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia", "lat": 3.0631155, "lng": 101.6950693, "state": "Kuala Lumpur", "verified": true}, {"store": "Favonia Hobbies", "date": "2026-10-04", "address": "12B, Persiaran Greentown 6, Greentown Business Centre, 30450 Ipoh, Perak, Malaysia", "lat": 4.599349, "lng": 101.094777, "state": "Perak", "verified": true}, {"store": "Gathering Hub", "date": "2026-10-04", "address": "Block C, Kepayan Point, Jalan Penampang, Kepayan, 88200 Kota Kinabalu, Sabah", "lat": 5.945, "lng": 116.097, "state": "Sabah", "verified": true}, {"store": "The Card Shop PLT", "date": "2026-10-04", "address": "54A, Jln 19/3, Seksyen 19, 46300 Petaling Jaya, Selangor, Malaysia", "lat": 3.120107, "lng": 101.629222, "state": "Selangor", "verified": true}, {"store": "Game and Glory Sdn Bhd", "date": "2026-10-10", "address": "F-1, 42, Jalan PJU 1/45, Aman Suria, 47301 Petaling Jaya, Selangor, Malaysia", "lat": 3.1207726, "lng": 101.5966195, "state": "Selangor", "verified": true}, {"store": "YOLO TCG PARK", "date": "2026-10-10", "address": "Parcel no.2 - level 3, Of Bintulu Parkcity Commerce Square, 97000 Bintulu, Sarawak, Malaysia", "lat": 3.1832638, "lng": 113.0393721, "state": "Sarawak", "verified": true}, {"store": "Hobby Lords Malaysia", "date": "2026-10-10", "address": "31-1F, Persiaran Setia Utama, Setia Alam, 40170 Shah Alam, Selangor, Malaysia", "lat": 3.124617, "lng": 101.468958, "state": "Selangor", "verified": true}, {"store": "Games Haven BBK", "date": "2026-10-10", "address": "17, Lorong Tiara 1a, Bandar Baru Klang, 41150 Klang, Selangor, Malaysia", "lat": 3.063789, "lng": 101.4696705, "state": "Selangor", "verified": true}, {"store": "Tabletop Arena", "date": "2026-10-11", "address": "S-206, 2ND FLOOR, 1BORNEO HYPERMALL JALAN SULAMAN, 88450 Kota Kinabalu, Sabah, Malaysia", "lat": 6.0354466, "lng": 116.1291846, "state": "Sabah", "verified": true}, {"store": "Spectre", "date": "2026-10-11", "address": "9-1, Jalan PJS 8/13, Bandar Sunway, 46150 Subang Jaya, Selangor, Malaysia", "lat": 3.0780854, "lng": 101.6109343, "state": "Selangor", "verified": true}, {"store": "Kado", "date": "2026-10-17", "address": "2F, A0331, Block A, Eco Galleria Iskandar Puteri, 79100 Johor, Johor Darul Ta'zim, Malaysia", "lat": 1.4420908, "lng": 103.6157873, "state": "Johor", "verified": true}, {"store": "MVP Hobbies & Collectibles Sdn Bhd", "date": "2026-10-17", "address": "A-G-17, Ground Floor, Zenopy Shoplex, Jln LP 7/4, Lestari Perdana, 43300 Seri Kembangan, Selangor, Malaysia", "lat": 3.0076806, "lng": 101.668882, "state": "Selangor", "verified": true}, {"store": "SGC Card Cafe", "date": "2026-10-18", "address": "23-02, Jalan Suria 7, Bandar Baru Seri Alam, 81750 Masai, Johor Darul Ta'zim, Malaysia", "lat": 1.4945672, "lng": 103.874336, "state": "Johor", "verified": true}, {"store": "Astral Rift Tactics Shop", "date": "2026-10-24", "address": "8A, Medan Bercham Selatan 1, Medan Bercham Selatan, 31400 Ipoh, Perak, Malaysia", "lat": 4.6248104, "lng": 101.1204959, "state": "Perak", "verified": true}, {"store": "Monxter", "date": "2026-10-24", "address": "18-2, Jalan Menara Gading 1, Taman Connaught, 56000 Cheras, Wilayah Persekutuan Kuala Lumpur, Malaysia", "lat": 3.0806548, "lng": 101.7329081, "state": "Kuala Lumpur", "verified": true}, {"store": "Kamenn Enterprise", "date": "2026-10-24", "address": "55a, Jalan Perwira 2, Taman Ungku Tun Aminah, 81300 Skudai, Johor Darul Ta'zim, Malaysia", "lat": 1.5243612, "lng": 103.6644272, "state": "Johor", "verified": true}, {"store": "Living Legends Enterprise", "date": "2026-10-25", "address": "32A, Jalan Pingai, Taman Pelangi, 80400 Johor Bahru, Johor Darul Ta'zim, Malaysia", "lat": 1.482418, "lng": 103.7736237, "state": "Johor", "verified": true}, {"store": "Vincent's Card Colosseum", "date": "2026-10-25", "address": "Phase 1, Lot 2035, 2nd Floor, 98000 Miri, Sarawak, Malaysia", "lat": 4.3896416, "lng": 113.9795994, "state": "Sarawak", "verified": true}, {"store": "Yugoco TCG & Games", "date": "2026-10-25", "address": "NO 5, 1, Jalan PNBB 2, Pusat Niaga Bukit Baru, 75150 Melaka, Malaysia", "lat": 2.2181171, "lng": 102.2738441, "state": "Melaka", "verified": true}, {"store": "CARDFIGHT BUDDY ENTERPRISE", "date": "2026-10-31", "address": "141B, Pusat Perniagaan Raja Uda, Jalan Raja Uda, Raja Uda, 12300 Butterworth, Pulau Pinang, Malaysia", "lat": 5.4204401, "lng": 100.3807133, "state": "Penang", "verified": true}, {"store": "KSL TCG ENTERPRISE", "date": "2026-10-31", "address": "39, Jalan Bukit Beruang Utama 2, Taman Bukit Beruang Indah, 75450 Ayer Keroh, Melaka", "lat": 2.273, "lng": 102.285, "state": "Melaka", "verified": true}, {"store": "Hobibear Gaming", "date": "2026-10-31", "address": "52A, Jalan Cerdas, Taman Connaught, 56000 Cheras, Wilayah Persekutuan Kuala Lumpur, Malaysia", "lat": 3.0814057, "lng": 101.7376678, "state": "Kuala Lumpur", "verified": true}, {"store": "Hans Arena", "date": "2026-11-01", "address": "D 1-07 1st Floor Block D, NZX Commercial Centre, Jalan PJU 1A/41B, Ara Damansara, 47301 Petaling Jaya, Selangor, Malaysia", "lat": 3.1144209, "lng": 101.5895152, "state": "Selangor", "verified": true}, {"store": "Yume Card Studio", "date": "2026-11-01", "address": "50b, Jalan Jati 1, Taman Nusa Bestari Jaya, 81300 Skudai, Johor Darul Ta'zim, Malaysia", "lat": 1.5002552, "lng": 103.6561234, "state": "Johor", "verified": true}, {"store": "GUILDHALL PLT", "date": "2026-11-07", "address": "Unit D6-1-2 (2nd Floor), Block D6, Dana 1 Commercial Centre, Jalan PJU 1a/46, Ara Damansara, 47301 Petaling Jaya, Selangor, Malaysia", "lat": 3.111065, "lng": 101.5843486, "state": "Selangor", "verified": true}, {"store": "Shuffle by Snacks & Ladders", "date": "2026-11-07", "address": "337m, 2, Jalan Perak, Taman Ara, 11600 Jelutong, Pulau Pinang, Malaysia", "lat": 5.3994364, "lng": 100.3151915, "state": "Penang", "verified": true}, {"store": "SideDeck", "date": "2026-11-08", "address": "20-1, Jalan Impian Makmur 3/A, Saujana Impian, 43000 Kajang, Selangor", "lat": 2.980, "lng": 101.800, "state": "Selangor", "verified": true}, {"store": "Shuffle the duel field", "date": "2026-11-08", "address": "10-01, Jalan Austin Perdana 2/24, Taman Austin Perdana, 81100 Johor Bahru, Johor Darul Ta'zim, Malaysia", "lat": 1.5478277, "lng": 103.7813303, "state": "Johor", "verified": true}, {"store": "Gentoshi", "date": "2026-11-08", "address": "2nd Floor, Lot 10520, Block 16, KCLD, Jalan Tun Jugah, 93350 Kuching, Sarawak, Malaysia", "lat": 1.5263638, "lng": 110.3568156, "state": "Sarawak", "verified": true}, {"store": "DeckOutDen", "date": "2026-11-15", "address": "15-1, Jln Reko Sentral 9, Reko Sentral, 43000 Kajang, Selangor, Malaysia", "lat": 2.9684518, "lng": 101.7889542, "state": "Selangor", "verified": true}, {"store": "Hobby Outpost Cheras", "date": "2026-11-15", "address": "C-63, 1, Jalan C180/1, Dataran C180, 43200 Cheras, Selangor, Malaysia", "lat": 3.0374001, "lng": 101.7656454, "state": "Selangor", "verified": true}, {"store": "Storm Gate Games", "date": "2026-11-22", "address": "R-3A-27 Emporis, Persiaran Surian, Kota Damansara, 47810 Petaling Jaya, Selangor, Malaysia", "lat": 3.1566716, "lng": 101.5719776, "state": "Selangor", "verified": true}, {"store": "Game On Boardgame Cafe", "date": null, "address": "199B, Jln PSK 5, Pekan Simpang Kuala, 05400 Alor Setar, Kedah, Malaysia", "lat": 6.1007197, "lng": 100.3652762, "state": "Kedah", "verified": true}, {"store": "ZergHive TCG", "date": null, "address": "100, Jalan Pasar, 34000 Taiping, Perak, Malaysia", "lat": 4.8525214, "lng": 100.74076, "state": "Perak", "verified": true}];
+  const CONFIG = window.GA_HORIZON_CONFIG || {};
+  const DEFAULT_EVENTS = CONFIG.fallbackEvents || [];
+  const FMT = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const monthNames = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 
-let mode = "all";
-let searchTerm = "";
-let stateFilter = "all";
+  function normalizeEvent(event) {
+    const dateValue = event.date && event.date !== 'TBD' ? event.date : null;
+    const formattedDate = dateValue ? FMT.format(new Date(dateValue + 'T00:00:00')).replace(/ /g, ' ') : 'TBD';
 
-document.getElementById('searchInput').oninput = (e) => { searchTerm = e.target.value.toLowerCase(); render(); };
-document.querySelectorAll('#statusToggle button').forEach(btn => {
-  btn.onclick = () => {
-    mode = btn.dataset.mode;
-    document.querySelectorAll('#statusToggle button').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');
-    render();
-  };
-});
-
-const SEASON_START = new Date('2026-08-28T00:00:00');
-const SEASON_END = new Date('2026-12-11T23:59:59');
-const TODAY = new Date();
-TODAY.setHours(0, 0, 0, 0);
-
-function isSeasonActive(){
-  return TODAY >= SEASON_START && TODAY <= SEASON_END;
-}
-
-function isEventInSeason(event){
-  if (!event || !event.date) return true;
-  const eventDate = new Date(event.date + 'T00:00:00');
-  return eventDate >= TODAY && eventDate <= SEASON_END;
-}
-
-const states = [...new Set(EVENTS.filter(e => e.state && (!e.date || isEventInSeason(e))).map(e => e.state))].sort();
-const stateSelect = document.getElementById('stateFilter');
-stateSelect.innerHTML = '<option value="all">All states</option>' + states.map(s => `<option value="${s}">${s}</option>`).join('');
-stateSelect.onchange = (e) => { stateFilter = e.target.value; render(); };
-
-function monthLabel(iso){
-  if(!iso) return "Date TBD";
-  const dt = new Date(iso + "T00:00:00");
-  return dt.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-}
-function dayLabel(iso){
-  if(!iso) return "TBD";
-  const dt = new Date(iso + "T00:00:00");
-  return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-}
-function dayNum(iso){
-  if(!iso) return "?";
-  return new Date(iso + "T00:00:00").getDate();
-}
-
-function isUnconfirmedLocation(e){
-  if (!e || !e.address || !e.state) return true;
-
-  const text = `${e.address} ${e.state}`.trim();
-  const hasAddressNumber = /\d/.test(text);
-  const isTooShort = text.length < 20;
-  const hasPlaceholder = /^(tbd|to be determined|unknown|n\/a)$/i.test(text);
-
-  return !hasAddressNumber || isTooShort || hasPlaceholder;
-}
-
-function render(){
-  const visibleEvents = EVENTS.filter(e => !e.date || isEventInSeason(e));
-  const filtered = visibleEvents.filter(e =>
-    (mode === "all" || (mode === "tbd" && !e.date) || (mode === "unverified" && isUnconfirmedLocation(e))) &&
-    (stateFilter === "all" || e.state === stateFilter) &&
-    (searchTerm === "" || e.store.toLowerCase().includes(searchTerm))
-  );
-
-  const tbdCount = visibleEvents.filter(e => !e.date).length;
-  const unverifiedCount = visibleEvents.filter(e => isUnconfirmedLocation(e)).length;
-  const monthsCount = new Set(visibleEvents.filter(e => e.date).map(e => e.date.slice(0,7))).size;
-
-  document.getElementById('tally').innerHTML = `
-    <div><div class="num">${visibleEvents.length}</div><div class="lbl">Total events</div></div>
-    <div><div class="num">${states.length}</div><div class="lbl">States covered</div></div>
-    <div><div class="num">${tbdCount}</div><div class="lbl">Date TBD</div></div>
-    <div><div class="num">${unverifiedCount}</div><div class="lbl">Needs address</div></div>
-  `;
-
-  const content = document.getElementById('content');
-
-  if(filtered.length === 0){
-    content.innerHTML = '<div class="empty">No events match — try clearing a filter.</div>';
-    document.getElementById('countLabel').textContent = `Showing 0 of ${visibleEvents.length}`;
-    return;
+    return {
+      store: event.store || 'Unnamed event',
+      date: formattedDate,
+      rawDate: event.date || null,
+      address: event.address || 'Location to be confirmed',
+      state: event.state || 'TBC',
+      verified: !!event.verified,
+      type: event.type === 'regional' ? 'regional' : 'store',
+      mapsUrl: event.mapsUrl || 'https://maps.google.com',
+      isTBD: !!event.isTBD || event.date === 'TBD'
+    };
   }
 
-  const sorted = [...filtered].sort((a,b) => {
-    if(!a.date && !b.date) return 0;
-    if(!a.date) return 1;
-    if(!b.date) return -1;
-    return a.date.localeCompare(b.date);
-  });
+  function mapRowToEvent(row) {
+    return {
+      store: row.store_name || row.title || 'Unknown store',
+      date: row.date ? FMT.format(new Date(row.date + 'T00:00:00')).replace(/ /g, ' ') : 'TBD',
+      rawDate: row.date || null,
+      address: row.google_maps_url ? 'Google Maps link available' : 'Location to be confirmed',
+      state: row.state || 'TBC',
+      verified: !!row.is_verified,
+      type: /regional/i.test(row.title || '') ? 'regional' : 'store',
+      mapsUrl: row.google_maps_url || 'https://maps.google.com',
+      isTBD: !!row.date_tbd
+    };
+  }
 
-  const groups = [];
-  let lastKey = null;
-  sorted.forEach(e => {
-    const key = e.date ? e.date.slice(0,7) : "TBD";
-    if(key !== lastKey){
-      groups.push({ key, label: monthLabel(e.date), items: [] });
-      lastKey = key;
+  function formatDateForCard(event) {
+    return event.isTBD ? 'TBD' : event.date;
+  }
+
+  function getMonthKey(event) {
+    if (event.isTBD || !event.rawDate) return 'Date TBD';
+    return monthNames.format(new Date(event.rawDate + 'T00:00:00'));
+  }
+
+  async function loadEvents() {
+    const shouldUseSupabase = !!CONFIG.useSupabase && !!CONFIG.supabaseUrl && !CONFIG.supabaseUrl.includes('YOUR_PROJECT');
+
+    if (!shouldUseSupabase || !window.supabase) {
+      return (DEFAULT_EVENTS || []).map(normalizeEvent);
     }
-    groups[groups.length-1].items.push(e);
-  });
 
-  content.innerHTML = groups.map(g => `
-    <div class="month-divider">
-      <span class="label">${g.label}</span>
-      <span class="rule"></span>
-      <span class="count">${g.items.length} event${g.items.length === 1 ? '' : 's'}</span>
-    </div>
-    <div class="grid">
-      ${g.items.map((e, i) => `
-        <div class="card ${e.type === 'regional' ? 'regional' : ''}" style="animation-delay:${i * 0.02}s">
-          <div class="card-top">
-            <div class="seal ${e.date ? '' : 'tbd'}">${e.date ? dayNum(e.date) : 'TBD'}</div>
-            ${isUnconfirmedLocation(e) ? '<span class="unverified-flag">Unconfirmed</span>' : ''}
-          </div>
-          <div class="store">${e.store}</div>
-          ${e.address ? `<div class="address">${e.address}</div>` : '<div class="address">Location TBC</div>'}
-          ${e.state ? `<span class="state-tag">${e.state}</span>` : ''}
-          ${e.address && e.address !== 'TBC' ? `<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener noreferrer">Navigate</a>` : ''}
-          ${e.store === 'The Weatherlight Enterprise' ? '<a class="event-link" href="stores/The%20Weatherlight%20Enterprise/index.html">View event info</a>' : ''}
-          <div class="meta-row">
-            <span class="date ${e.date ? '' : 'tbd'}">${e.date ? dayLabel(e.date) : 'Date TBD'}</span>
-            <span>${e.type === 'regional' ? 'Regional' : 'Store Championship'}</span>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `).join('');
+    const supabase = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
+      auth: { persistSession: false }
+    });
 
-  document.getElementById('countLabel').textContent = `Showing ${filtered.length} of ${visibleEvents.length}`;
-}
+    const { data, error } = await supabase
+      .from('season_event_summary')
+      .select('*')
+      .eq('season_slug', CONFIG.seasonSlug || 'prd-2026')
+      .order('date', { ascending: true, nullsFirst: true });
 
-const seasonStatusEl = document.getElementById('seasonStatus');
-if (seasonStatusEl) {
-  seasonStatusEl.textContent = isSeasonActive() ? 'Season active' : 'Season complete';
-}
+    if (error) {
+      console.error('Supabase event load failed:', error);
+      return (DEFAULT_EVENTS || []).map(normalizeEvent);
+    }
 
-render();
+    return Array.isArray(data) ? data.map(mapRowToEvent) : (DEFAULT_EVENTS || []).map(normalizeEvent);
+  }
+
+  function renderTally(events) {
+    const all = events.length;
+    const tbd = events.filter(e => e.isTBD || e.date === 'TBD').length;
+    const unverified = events.filter(e => !e.verified).length;
+
+    document.getElementById('tally').innerHTML = `
+      <div><div class="num">${all}</div><div class="lbl">Events</div></div>
+      <div><div class="num">${tbd}</div><div class="lbl">Date TBD</div></div>
+      <div><div class="num">${unverified}</div><div class="lbl">Needs address</div></div>
+    `;
+  }
+
+  function renderEvents(events) {
+    const content = document.getElementById('content');
+    const monthGroups = new Map();
+
+    if (!events.length) {
+      content.innerHTML = '<div class="empty">No matching events.</div>';
+      return;
+    }
+
+    [...events].sort((a, b) => {
+      const aKey = a.isTBD || !a.rawDate ? Number.MAX_SAFE_INTEGER : new Date(a.rawDate + 'T00:00:00').getTime();
+      const bKey = b.isTBD || !b.rawDate ? Number.MAX_SAFE_INTEGER : new Date(b.rawDate + 'T00:00:00').getTime();
+      return aKey - bKey;
+    }).forEach(event => {
+      const month = getMonthKey(event);
+      if (!monthGroups.has(month)) monthGroups.set(month, []);
+      monthGroups.get(month).push(event);
+    });
+
+    content.innerHTML = [...monthGroups.entries()].map(([month, monthEvents]) => `
+      <div class="month-divider">
+        <div class="label">${month}</div>
+        <div class="rule"></div>
+        <div class="count">${monthEvents.length} event${monthEvents.length > 1 ? 's' : ''}</div>
+      </div>
+      <div class="grid">
+        ${monthEvents.map(event => `
+          <article class="card ${event.type === 'regional' ? 'regional' : ''}">
+            <div class="card-top">
+              <div class="seal ${event.isTBD ? 'tbd' : ''}">${event.type === 'regional' ? 'R' : 'S'}</div>
+              ${!event.verified ? '<span class="unverified-flag">Needs address</span>' : ''}
+            </div>
+            <h2 class="store">${event.store}</h2>
+            <div class="address">${event.address}</div>
+            <div class="state-tag">${event.state || 'TBC'}</div>
+            <div class="meta-row">
+              <span class="date ${event.isTBD ? 'tbd' : ''}">${formatDateForCard(event)}</span>
+              <span>${event.type === 'regional' ? 'Regional' : 'Championship'}</span>
+            </div>
+            <a class="map-link" href="${event.mapsUrl}" target="_blank" rel="noopener noreferrer">Open in Maps</a>
+          </article>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  const searchInput = document.getElementById('searchInput');
+  const stateFilter = document.getElementById('stateFilter');
+  const statusToggle = document.getElementById('statusToggle');
+  const countLabel = document.getElementById('countLabel');
+
+  function refreshStates(events) {
+    const states = [...new Set(events.map(event => event.state || 'TBC'))].sort();
+    const current = stateFilter.value;
+    stateFilter.innerHTML = '<option value="all">All regions</option>' + states.map(state => `<option value="${state}">${state}</option>`).join('');
+    stateFilter.value = states.includes(current) ? current : 'all';
+  }
+
+  function applyFilters(events) {
+    const term = searchInput.value.trim().toLowerCase();
+    const state = stateFilter.value;
+    const mode = document.querySelector('#statusToggle button.on')?.dataset.mode || 'all';
+
+    const filtered = events.filter(event => {
+      const matchesSearch = !term || event.store.toLowerCase().includes(term);
+      const matchesState = state === 'all' || event.state === state;
+      const matchesMode = mode === 'all' ? true : mode === 'tbd' ? event.isTBD : !event.verified;
+
+      return matchesSearch && matchesState && matchesMode;
+    });
+
+    renderTally(filtered);
+    renderEvents(filtered);
+    countLabel.textContent = `${filtered.length} visible`;
+  }
+
+  async function init() {
+    const EVENTS = await loadEvents();
+
+    refreshStates(EVENTS);
+    applyFilters(EVENTS);
+
+    searchInput.addEventListener('input', () => applyFilters(EVENTS));
+    stateFilter.addEventListener('change', () => applyFilters(EVENTS));
+    statusToggle.addEventListener('click', (event) => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      statusToggle.querySelectorAll('button').forEach(btn => btn.classList.toggle('on', btn === button));
+      applyFilters(EVENTS);
+    });
+  }
+
+  init();
 </script>
 </body>
 </html>
