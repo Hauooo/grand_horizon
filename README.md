@@ -2,6 +2,10 @@
 
 GA_Horizon is a lightweight Grand Archive season companion focused on Malaysia. It helps try-hard players and organisers track weekly events, store championships, regional tournaments, and venue details in a clean, mobile-friendly dashboard.
 
+## Website
+
+Live site: https://grand-horizon-five.vercel.app/
+
 ## Purpose
 
 The site is designed to keep event information easy to scan and quick to use in practice:
@@ -32,6 +36,12 @@ The main page displays:
 - `PRD Shore Champs Malaysia.csv` — source event data for the PRD festival/season board
 - `favicon.jpg` — site icon used for the browser tab
 - `stores/` — store-specific detail pages (for example, Weatherlight Enterprise)
+
+  
+
+
+
+
 
 
 ## Notes for future expansion
