@@ -43,6 +43,25 @@ body::before{
 .wrap{ max-width: 1040px; margin: 0 auto; padding: 0 32px; position:relative; z-index:1; }
 
 header{ padding: 56px 0 28px 0; border-bottom: 1px solid var(--line); }
+.season-banner{
+   display:flex; align-items:center; justify-content:space-between; gap:16px;
+   background: linear-gradient(135deg, rgba(58,124,165,0.28), rgba(201,162,75,0.16));
+   border:1px solid rgba(201,162,75,0.55); border-radius:12px; padding:14px 18px; margin:0 0 20px 0;
+   flex-wrap:wrap;
+}
+.season-banner-left{ display:flex; align-items:center; gap:14px; min-width:0; }
+.season-logo{ width:82px; height:82px; border-radius:12px; object-fit:cover; display:block; }
+.season-badge{
+   font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+   color: var(--gold-bright); margin:0 0 6px 0;
+}
+.season-status{ font-family:'Fraunces', serif; font-size:26px; line-height:1; margin:0; }
+.season-guide{
+   font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+   color: var(--parchment); text-decoration:none; border:1px solid rgba(234,227,210,0.32); border-radius:999px;
+   padding:10px 14px; white-space:nowrap;
+}
+.season-guide:hover{ border-color: var(--gold); }
 .eyebrow{
   font-family:'IBM Plex Mono', monospace;
   font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
@@ -50,7 +69,7 @@ header{ padding: 56px 0 28px 0; border-bottom: 1px solid var(--line); }
   display:flex; align-items:center; gap:10px;
 }
 .eyebrow::before{ content:""; width:22px; height:1px; background: var(--gold); display:inline-block; }
-
+  
 h1{
   font-family:'Fraunces', serif;
   font-optical-sizing: auto;
@@ -215,6 +234,16 @@ footer{
 <div class="wrap">
 
   <header>
+    <div class="season-banner">
+      <div class="season-banner-left">
+        <img class="season-logo" src="PRD_Logo.png" alt="PRD season logo" />
+        <div>
+          <div class="season-badge">PRD Season</div>
+          <p class="season-status" id="seasonStatus">Season active</p>
+        </div>
+      </div>
+      <a class="season-guide" href="https://storage.googleapis.com/omnidex/seasons/PRD%20Season%20Guide.pdf" target="_blank" rel="noopener noreferrer">PRD Season Guide</a>
+    </div>
     <p class="eyebrow">Grand Archive TCG · Malaysia</p>
     <h1>Grand Archive <em>Horizon</em></h1>
     <p class="subline">Store championships across Malaysia — locations cross-checked against Google Places. 4 of 41 stores couldn't be confidently matched and are flagged below.</p>
@@ -261,7 +290,22 @@ document.querySelectorAll('#statusToggle button').forEach(btn => {
   };
 });
 
-const states = [...new Set(EVENTS.filter(e => e.state).map(e => e.state))].sort();
+const SEASON_START = new Date('2026-08-28T00:00:00');
+const SEASON_END = new Date('2026-12-11T23:59:59');
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0);
+
+function isSeasonActive(){
+  return TODAY >= SEASON_START && TODAY <= SEASON_END;
+}
+
+function isEventInSeason(event){
+  if (!event || !event.date) return true;
+  const eventDate = new Date(event.date + 'T00:00:00');
+  return eventDate >= TODAY && eventDate <= SEASON_END;
+}
+
+const states = [...new Set(EVENTS.filter(e => e.state && (!e.date || isEventInSeason(e))).map(e => e.state))].sort();
 const stateSelect = document.getElementById('stateFilter');
 stateSelect.innerHTML = '<option value="all">All states</option>' + states.map(s => `<option value="${s}">${s}</option>`).join('');
 stateSelect.onchange = (e) => { stateFilter = e.target.value; render(); };
@@ -293,18 +337,19 @@ function isUnconfirmedLocation(e){
 }
 
 function render(){
-  const filtered = EVENTS.filter(e =>
+  const visibleEvents = EVENTS.filter(e => !e.date || isEventInSeason(e));
+  const filtered = visibleEvents.filter(e =>
     (mode === "all" || (mode === "tbd" && !e.date) || (mode === "unverified" && isUnconfirmedLocation(e))) &&
     (stateFilter === "all" || e.state === stateFilter) &&
     (searchTerm === "" || e.store.toLowerCase().includes(searchTerm))
   );
 
-  const tbdCount = EVENTS.filter(e => !e.date).length;
-  const unverifiedCount = EVENTS.filter(e => isUnconfirmedLocation(e)).length;
-  const monthsCount = new Set(EVENTS.filter(e => e.date).map(e => e.date.slice(0,7))).size;
+  const tbdCount = visibleEvents.filter(e => !e.date).length;
+  const unverifiedCount = visibleEvents.filter(e => isUnconfirmedLocation(e)).length;
+  const monthsCount = new Set(visibleEvents.filter(e => e.date).map(e => e.date.slice(0,7))).size;
 
   document.getElementById('tally').innerHTML = `
-    <div><div class="num">${EVENTS.length}</div><div class="lbl">Total events</div></div>
+    <div><div class="num">${visibleEvents.length}</div><div class="lbl">Total events</div></div>
     <div><div class="num">${states.length}</div><div class="lbl">States covered</div></div>
     <div><div class="num">${tbdCount}</div><div class="lbl">Date TBD</div></div>
     <div><div class="num">${unverifiedCount}</div><div class="lbl">Needs address</div></div>
@@ -314,7 +359,7 @@ function render(){
 
   if(filtered.length === 0){
     content.innerHTML = '<div class="empty">No events match — try clearing a filter.</div>';
-    document.getElementById('countLabel').textContent = `Showing 0 of ${EVENTS.length}`;
+    document.getElementById('countLabel').textContent = `Showing 0 of ${visibleEvents.length}`;
     return;
   }
 
@@ -363,7 +408,12 @@ function render(){
     </div>
   `).join('');
 
-  document.getElementById('countLabel').textContent = `Showing ${filtered.length} of ${EVENTS.length}`;
+  document.getElementById('countLabel').textContent = `Showing ${filtered.length} of ${visibleEvents.length}`;
+}
+
+const seasonStatusEl = document.getElementById('seasonStatus');
+if (seasonStatusEl) {
+  seasonStatusEl.textContent = isSeasonActive() ? 'Season active' : 'Season complete';
 }
 
 render();
