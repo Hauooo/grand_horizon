@@ -294,8 +294,8 @@ footer{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./supabase-config.js"></script>
 <script>
-  let CONFIG = window.GA_HORIZON_CONFIG || {};
-  let DEFAULT_EVENTS = CONFIG.fallbackEvents || [];
+  const CONFIG = window.GA_HORIZON_CONFIG || {};
+  const DEFAULT_EVENTS = CONFIG.fallbackEvents || [];
   const FMT = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const monthNames = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 
@@ -311,8 +311,6 @@ footer{
         ...(window.GA_HORIZON_CONFIG || {}),
         ...runtimeConfig,
       };
-      CONFIG = window.GA_HORIZON_CONFIG;
-      DEFAULT_EVENTS = CONFIG.fallbackEvents || [];
     } catch (error) {
       console.warn('Runtime config unavailable; using local fallback settings.', error);
     }
