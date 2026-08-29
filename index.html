@@ -189,6 +189,12 @@ select:focus{ border-color: var(--gold); }
   color: var(--water); text-decoration: none; border-bottom: 1px solid rgba(58,124,165,.5);
 }
 .map-link:hover{ color: var(--parchment); border-color: rgba(234,227,210,.75); }
+.detail-link{
+  display:inline-block; margin-top: 12px; margin-right: 12px; font-family:'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gold-bright); text-decoration: none; border-bottom: 1px solid rgba(233,196,120,.42);
+}
+.detail-link:hover{ color: var(--parchment); border-color: rgba(234,227,210,.75); }
 @keyframes rise{ to{ opacity:1; transform: translateY(0); } }
 
 .card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap: 10px; margin-bottom: 10px; }
@@ -293,12 +299,20 @@ footer{
   const FMT = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const monthNames = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 
+  function getDetailUrl(storeName) {
+    if (/weatherlight/i.test(storeName || '')) {
+      return './stores/The%20Weatherlight%20Enterprise/index.html';
+    }
+    return '';
+  }
+
   function normalizeEvent(event) {
     const dateValue = event.date && event.date !== 'TBD' ? event.date : null;
     const formattedDate = dateValue ? FMT.format(new Date(dateValue + 'T00:00:00')).replace(/ /g, ' ') : 'TBD';
+    const storeName = event.store || 'Unnamed event';
 
     return {
-      store: event.store || 'Unnamed event',
+      store: storeName,
       date: formattedDate,
       rawDate: event.date || null,
       address: event.address || 'Location to be confirmed',
@@ -306,20 +320,23 @@ footer{
       verified: !!event.verified,
       type: event.type === 'regional' ? 'regional' : 'store',
       mapsUrl: event.mapsUrl || 'https://maps.google.com',
+      detailUrl: getDetailUrl(storeName),
       isTBD: !!event.isTBD || event.date === 'TBD'
     };
   }
 
   function mapRowToEvent(row) {
+    const storeName = row.store_name || row.title || 'Unknown store';
+
     return {
-      store: row.store_name || row.title || 'Unknown store',
+      store: storeName,
       date: row.date ? FMT.format(new Date(row.date + 'T00:00:00')).replace(/ /g, ' ') : 'TBD',
       rawDate: row.date || null,
-      address: row.google_maps_url ? ' ' : 'Location to be confirmed',
       state: row.state || 'TBC',
       verified: !!row.is_verified,
       type: /regional/i.test(row.title || '') ? 'regional' : 'store',
       mapsUrl: row.google_maps_url || 'https://maps.google.com',
+      detailUrl: getDetailUrl(storeName),
       isTBD: !!row.date_tbd
     };
   }
@@ -409,6 +426,7 @@ footer{
               <span class="date ${event.isTBD ? 'tbd' : ''}">${formatDateForCard(event)}</span>
               <span>${event.type === 'regional' ? 'Regional' : 'Store Championship'}</span>
             </div>
+            ${event.detailUrl ? `<a class="detail-link" href="${event.detailUrl}">View details</a>` : ''}
             <a class="map-link" href="${event.mapsUrl}" target="_blank" rel="noopener noreferrer">Open in Maps</a>
           </article>
         `).join('')}
