@@ -6,6 +6,26 @@ GA_Horizon is a lightweight Grand Archive season companion focused on Malaysia. 
 
 Live site: https://grand-horizon-five.vercel.app/
 
+## Secure Vercel configuration
+
+This project is intentionally configured to avoid hardcoded Supabase credentials in the repository. For Vercel deployments, set environment variables in the project dashboard instead of checking real values into Git.
+
+Required variables:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SEASON_SLUG` (defaults to `prd-2026`)
+
+Example values:
+
+```bash
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+SEASON_SLUG=prd-2026
+```
+
+The app loads `/api/config` at runtime, which reads these environment variables and exposes a safe public config to the browser without committing the secrets to the repo. A local fallback config remains available for testing without Supabase.
+
 ## Purpose
 
 The site is designed to keep event information easy to scan and quick to use in practice:

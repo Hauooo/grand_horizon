@@ -299,6 +299,23 @@ footer{
   const FMT = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const monthNames = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 
+  async function hydrateRuntimeConfig() {
+    try {
+      const response = await fetch('/api/config', { cache: 'no-store' });
+      if (!response.ok) return;
+
+      const runtimeConfig = await response.json();
+      if (!runtimeConfig || typeof runtimeConfig !== 'object') return;
+
+      window.GA_HORIZON_CONFIG = {
+        ...(window.GA_HORIZON_CONFIG || {}),
+        ...runtimeConfig,
+      };
+    } catch (error) {
+      console.warn('Runtime config unavailable; using local fallback settings.', error);
+    }
+  }
+
   function getDetailUrl(storeName) {
     if (/weatherlight/i.test(storeName || '')) {
       return './stores/The%20Weatherlight%20Enterprise/index.html';
@@ -467,6 +484,8 @@ footer{
   }
 
   async function init() {
+    await hydrateRuntimeConfig();
+
     const EVENTS = await loadEvents();
 
     refreshStates(EVENTS);

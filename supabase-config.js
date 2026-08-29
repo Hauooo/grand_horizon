@@ -1,8 +1,8 @@
-window.GA_HORIZON_CONFIG = window.GA_HORIZON_CONFIG || {
-  useSupabase: true,
+﻿window.GA_HORIZON_CONFIG = window.GA_HORIZON_CONFIG || {
+  useSupabase: false,
   seasonSlug: 'prd-2026',
-  supabaseUrl: 'https://fczdrogoifkmdhhqddig.supabase.co',
-  supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjemRyb2dvaWZrbWRoaHFkZGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5OTc5NDMsImV4cCI6MjEwMzU3Mzk0M30.SGiSh4uyK5LjnpkkmwHSBX-nnRlpgxv5D4uiMiMlMD8',
+  supabaseUrl: 'https://YOUR_PROJECT_REF.supabase.co',
+  supabaseAnonKey: 'YOUR_SUPABASE_ANON_KEY',
   fallbackEvents: [
     {
       store: 'Malaysia Regional 1',
