@@ -327,11 +327,13 @@ footer{
 
   function mapRowToEvent(row) {
     const storeName = row.store_name || row.title || 'Unknown store';
+    const venueAddress = row.address || row.venue_address || 'Location to be confirmed';
 
     return {
       store: storeName,
       date: row.date ? FMT.format(new Date(row.date + 'T00:00:00')).replace(/ /g, ' ') : 'TBD',
       rawDate: row.date || null,
+      address: venueAddress,
       state: row.state || 'TBC',
       verified: !!row.is_verified,
       type: /regional/i.test(row.title || '') ? 'regional' : 'store',

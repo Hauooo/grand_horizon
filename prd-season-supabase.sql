@@ -212,7 +212,8 @@ select
   e.date_tbd,
   e.status,
   e.visibility,
-  coalesce(st.region, v.state, 'TBC') as state,
+  coalesce(v.address, 'Location to be confirmed') as address,
+  coalesce(v.state, st.region, 'TBC') as state,
   e.maps_url as google_maps_url,
   case
     when e.event_type = 'regional' then false
