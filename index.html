@@ -318,10 +318,8 @@ footer{
   }
 
   function getDetailUrl(storeName) {
-    if (/weatherlight/i.test(storeName || '')) {
-      return './stores/The%20Weatherlight%20Enterprise/index.html';
-    }
-    return '';
+    if (!storeName) return '';
+    return `./stores/${encodeURIComponent(storeName)}/index.html`;
   }
 
   function normalizeEvent(event) {
@@ -338,7 +336,7 @@ footer{
       verified: !!event.verified,
       type: event.type === 'regional' ? 'regional' : 'store',
       mapsUrl: event.mapsUrl || 'https://maps.google.com',
-      detailUrl: getDetailUrl(storeName),
+      detailUrl: event.type === 'regional' ? '' : getDetailUrl(storeName),
       isTBD: !!event.isTBD || event.date === 'TBD'
     };
   }
@@ -346,6 +344,7 @@ footer{
   function mapRowToEvent(row) {
     const storeName = row.store_name || row.title || 'Unknown store';
     const venueAddress = row.address || row.venue_address || 'Location to be confirmed';
+    const isRegional = /regional/i.test(row.title || '');
 
     return {
       store: storeName,
@@ -354,9 +353,9 @@ footer{
       address: venueAddress,
       state: row.state || 'TBC',
       verified: !!row.is_verified,
-      type: /regional/i.test(row.title || '') ? 'regional' : 'store',
+      type: isRegional ? 'regional' : 'store',
       mapsUrl: row.google_maps_url || 'https://maps.google.com',
-      detailUrl: getDetailUrl(storeName),
+      detailUrl: isRegional ? '' : getDetailUrl(storeName),
       isTBD: !!row.date_tbd
     };
   }
