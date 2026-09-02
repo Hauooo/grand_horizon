@@ -1,5 +1,6 @@
 (function () {
   const SLUG = window.GA_STORE_SLUG;
+  const EVENT_TYPE = window.GA_EVENT_TYPE || 'store_championship';
   const app = document.getElementById('app');
   const FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
 
@@ -56,7 +57,7 @@
         <div class="header">
           <div>
             <p class="eyebrow">Grand Archive TCG</p>
-            <div style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);">Store championship</div>
+            <div style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);">${row.event_type === 'regional' ? 'Regional championship' : 'Store championship'}</div>
           </div>
           <a class="back" href="../../index.html">← Back to Horizon</a>
         </div>
@@ -65,7 +66,7 @@
           <div class="hero ${hasPoster ? '' : 'no-poster'}">
             ${hasPoster ? `<img class="poster" src="${escapeHtml(row.poster_url)}" alt="${escapeHtml(row.store_name)} store championship poster" />` : ''}
             <div class="info">
-              <span class="pill ${row.date_tbd ? 'tbd' : ''}">Malaysia · ${escapeHtml(row.state)}</span>
+              <span class="pill ${row.date_tbd ? 'tbd' : ''}">${escapeHtml(row.country || 'Malaysia')} · ${escapeHtml(row.state)}</span>
               <h1>${escapeHtml(row.store_name)}</h1>
               <div class="meta">${metaLines.join('')}</div>
               <div class="cta-row">${ctas.join('')}</div>
@@ -104,6 +105,7 @@
       .select('*')
       .eq('season_slug', cfg.seasonSlug || 'prd-2026')
       .eq('store_slug', SLUG)
+      .eq('event_type', EVENT_TYPE)
       .maybeSingle();
 
     if (error || !data) {
