@@ -264,7 +264,7 @@ footer{
     </div>
     <p class="eyebrow">Grand Archive TCG · Malaysia</p>
     <h1>Grand <em>Horizon</em></h1>
-    <p class="subline">Store championships across Malaysia — locations cross-checked against Google Places.</p>
+    <p class="subline">Store championships/Regionals across Malaysia — locations cross-checked against Google Places.</p>
   </header>
 
   <div class="controls">
@@ -317,17 +317,15 @@ footer{
     }
   }
 
-  function getDetailUrl(storeName, type) {
+  function getDetailUrl(storeName) {
     if (!storeName) return '';
-    const base = type === 'regional' ? './regionals/' : './stores/';
-    return `${base}${encodeURIComponent(storeName)}/index.html`;
+    return `./stores/${encodeURIComponent(storeName)}/index.html`;
   }
 
   function normalizeEvent(event) {
     const dateValue = event.date && event.date !== 'TBD' ? event.date : null;
     const formattedDate = dateValue ? FMT.format(new Date(dateValue + 'T00:00:00')).replace(/ /g, ' ') : 'TBD';
     const storeName = event.store || 'Unnamed event';
-    const type = event.type === 'regional' ? 'regional' : 'store';
 
     return {
       store: storeName,
@@ -336,9 +334,9 @@ footer{
       address: event.address || 'Location to be confirmed',
       state: event.state || 'TBC',
       verified: !!event.verified,
-      type: type,
+      type: event.type === 'regional' ? 'regional' : 'store',
       mapsUrl: event.mapsUrl || 'https://maps.google.com',
-      detailUrl: getDetailUrl(storeName, type),
+      detailUrl: event.type === 'regional' ? '' : getDetailUrl(storeName),
       isTBD: !!event.isTBD || event.date === 'TBD'
     };
   }
@@ -346,8 +344,7 @@ footer{
   function mapRowToEvent(row) {
     const storeName = row.store_name || row.title || 'Unknown store';
     const venueAddress = row.address || row.venue_address || 'Location to be confirmed';
-    const isRegional = row.event_type ? row.event_type === 'regional' : /regional/i.test(row.title || '');
-    const type = isRegional ? 'regional' : 'store';
+    const isRegional = /regional/i.test(row.title || '');
 
     return {
       store: storeName,
@@ -356,9 +353,9 @@ footer{
       address: venueAddress,
       state: row.state || 'TBC',
       verified: !!row.is_verified,
-      type: type,
+      type: isRegional ? 'regional' : 'store',
       mapsUrl: row.google_maps_url || 'https://maps.google.com',
-      detailUrl: getDetailUrl(storeName, type),
+      detailUrl: isRegional ? '' : getDetailUrl(storeName),
       isTBD: !!row.date_tbd
     };
   }
